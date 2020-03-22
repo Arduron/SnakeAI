@@ -196,8 +196,8 @@ class App:
         centerDir = [xCenter - self.player.x[0], yCenter - self.player.y[0]]
         #Berechne Winkel:
         angle = math.atan2(centerDir[1] * self.snakedir[0] - centerDir[0] * self.snakedir[1], centerDir[1] * self.snakedir[1] + centerDir[0] * self.snakedir[0])/ math.pi
-        angle = round(angle * 8) / 8
-        #print(angle)
+        angle = round(angle * 2) / 2
+        print(angle)
         return angle
 
 
