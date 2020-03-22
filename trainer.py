@@ -12,8 +12,8 @@ from matplotlib import pyplot
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 100
-askToLoad = False
+training_games = 200
+askToLoad = True
 saveTrainingData = False
 
 initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData)
@@ -25,6 +25,7 @@ polititian = QPolicy(initObjekt)
 baseName = 'TrainedModels/trainedState'
 
 if initObjekt.askToLoad:
+    goPlot = input('Plot data? (y/n) ')
     load = input('Load existing model? (y/n) ')
     if load == 'y':
         train = input('Continue training? (y/n) ')
@@ -107,7 +108,9 @@ for i in tqdm(range(initObjekt.training_games)):
 
         
     #plot statistics
-    statistics.on_running(stateDict, EatenApples)
+    if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
+        statistics.on_running(stateDict, EatenApples)
+
     if _exit:
         training_games = i + 1
         break 

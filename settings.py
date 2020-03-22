@@ -13,6 +13,7 @@ diskontierung = 0.8
 epsilonStart = 0.9
 epsilonDiscount = 0.99
 verzögerung = 20.0/1000.0
+plotIntervall = 10
 
 
 
@@ -29,4 +30,5 @@ class InitObject:
         self.askToLoad = askToLoad
         self.verzögerung = verzögerung
         self.saveTrainingData = saveTrainingData
+        self.plotIntervall = 10
     
