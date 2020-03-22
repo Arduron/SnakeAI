@@ -19,6 +19,7 @@ class Stats:
         self.length = len(self.applesEaten)
     
     def animatePlot(self, lenDict, eatenApple):
+        plt.ion()
         self.update(lenDict, eatenApple)
         self.ax1.clear()
         self.ax2.clear()
@@ -26,7 +27,10 @@ class Stats:
         self.ax1.plot(range(self.length), self.numberofQ)
         self.ax2.plot(range(self.length), self.applesEaten)
         plt.draw()
-        plt.pause(0.0001)
+        plt.show(block = False)
+        plt.ioff()
+        plt.show
+        # plt.pause(0.0001)
 
     def updatePlot(self, stateDict):
         ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)
