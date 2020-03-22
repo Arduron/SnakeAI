@@ -165,7 +165,7 @@ class App:
         self.text_typer("Momentan:" + str(self.player.length-3) + "  Average:" + str(average) + "  max:" + str(self.maxpunkte))
         self.on_loop()
         self.on_render()
-        #time.sleep (10.0 / 1000.0)
+        time.sleep (50.0 / 1000.0)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):

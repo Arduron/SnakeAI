@@ -9,7 +9,7 @@ import json
 from matplotlib import pyplot 
     
 
-training_games = 15
+training_games = 1000000
 
 stateDict = StateDict()
 polititian = QPolicy()
@@ -20,7 +20,7 @@ load = input('Load existing model? (y/n) ')
 if load == 'y':
     train = input('Continue training? (y/n) ')
     if train == 'n':
-        polititian.epsilon = 0
+        polititian.epsilonstart = 0
     
     #ask for model number to load 
     modelNr = input('Model number = ')
