@@ -18,7 +18,7 @@ plotIntervall = 10
 
 
 class InitObject:
-    def __init__(self, verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData):
+    def __init__(self, verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotIntervall):
         self.verzögern = verzögern
         self.spielfeldgöße = spielfeldgöße
         self.originalSnakeLength = originalSnakeLength
@@ -30,5 +30,6 @@ class InitObject:
         self.askToLoad = askToLoad
         self.verzögerung = verzögerung
         self.saveTrainingData = saveTrainingData
-        self.plotIntervall = 10
+        self.plotStats = plotStats
+        self.plotIntervall = plotIntervall
     

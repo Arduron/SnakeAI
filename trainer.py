@@ -13,10 +13,12 @@ from matplotlib import pyplot
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
 training_games = 200
-askToLoad = True
+askToLoad = False
 saveTrainingData = False
+plotStats = True
+plotInervall = 100
 
-initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData)
+initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
 
 
@@ -25,7 +27,6 @@ polititian = QPolicy(initObjekt)
 baseName = 'TrainedModels/trainedState'
 
 if initObjekt.askToLoad:
-    goPlot = input('Plot data? (y/n) ')
     load = input('Load existing model? (y/n) ')
     if load == 'y':
         train = input('Continue training? (y/n) ')
@@ -53,7 +54,11 @@ EatenApples = []
 _exit = False
 
 # for sttistics
-statistics = Stats()
+if plotStats:
+    statistics = Stats()
+    goPlot = input('Plot data? (y/n) ')
+    if goPlot == 'y':
+        statistics.on_init()
 
 
 for i in tqdm(range(initObjekt.training_games)):
@@ -108,8 +113,10 @@ for i in tqdm(range(initObjekt.training_games)):
 
         
     #plot statistics
-    if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
-        statistics.on_running(stateDict, EatenApples)
+    if plotStats:
+        statistics.update(stateDict, EatenApples)
+        if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
+            statistics.on_running()
 
     if _exit:
         training_games = i + 1
@@ -124,6 +131,10 @@ if initObjekt.saveTrainingData:
 with open(filename, 'w') as fp:
     json.dump(stateDict.stateHash, fp, indent=4)
 
+if initObjekt.plotStats:
+    statistics.on_init()
+    statistics.on_running()
+    pyplot.pause(100)
 # fig2 = pyplot.figure()
 # ax2 = fig2.add_subplot(1,1,1)  
 # ax2.plot(range(training_games), EatenApples) 
