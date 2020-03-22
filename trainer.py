@@ -9,7 +9,7 @@ import json
 from matplotlib import pyplot 
     
 
-training_games = 1000000
+training_games = 10
 
 stateDict = StateDict()
 polititian = QPolicy()

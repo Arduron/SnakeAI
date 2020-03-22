@@ -135,7 +135,7 @@ class App:
         self.snakedir = getCurrentDirection(self.player)
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
-        print(self.blocked)
+        #print(self.blocked)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
 
         #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
