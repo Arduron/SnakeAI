@@ -3,33 +3,41 @@ from tqdm import tqdm
 from qAufsatz import StateDict
 from policymaker import QPolicy
 from os import path
+from settings import InitObject
 
 import json
 
 from matplotlib import pyplot 
     
+verzögern = False
+spielfeldgöße = [15,15] #Breite dann Höhe
+training_games = 100
+askToLoad = False
+saveTrainingData = False
 
-training_games = 15
+initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData)
 
-stateDict = StateDict()
-polititian = QPolicy()
+
+
+stateDict = StateDict(initObjekt)
+polititian = QPolicy(initObjekt)
 baseName = 'TrainedModels/trainedState'
 
-load = input('Load existing model? (y/n) ')
+if initObjekt.askToLoad:
+    load = input('Load existing model? (y/n) ')
+    if load == 'y':
+        train = input('Continue training? (y/n) ')
+        if train == 'n':
+            polititian.epsilon = 0
+        
+        #ask for model number to load 
+        modelNr = input('Model number = ')
+        filename = baseName + modelNr + '.json'
 
-if load == 'y':
-    train = input('Continue training? (y/n) ')
-    if train == 'n':
-        polititian.epsilon = 0
-    
-    #ask for model number to load 
-    modelNr = input('Model number = ')
-    filename = baseName + modelNr + '.json'
-
-    #import training data isf existant 
-    if path.exists(filename):
-        with open(filename, 'r') as fp:
-            stateDict.stateHash = json.load(fp)
+        #import training data isf existant 
+        if path.exists(filename):
+            with open(filename, 'r') as fp:
+                stateDict.stateHash = json.load(fp)
 
 #create new filename
 modelNr = 1
@@ -39,18 +47,18 @@ while path.exists(filename):
     filename = baseName + str(modelNr) + '.json'
     
 
-steps = []
+EatenApples = []
 _exit = False
 
 
-for i in tqdm(range(training_games)):
+for i in tqdm(range(initObjekt.training_games)):
     
     _running = True
     
-    snakeGame = App()
+    snakeGame = App(initObjekt)
     snakeGame.on_startup()
     polititian.setEpsilon(i)
-    steps.append(0)
+    EatenApples.append(0)
     appleDis = snakeGame.getAppleDis()
 
 
@@ -70,7 +78,7 @@ for i in tqdm(range(training_games)):
         #führe ihn aus
         _running = [0,0,0]
         _running = snakeGame.on_execute(nextAction)
-        steps[i] = _running[1]
+        EatenApples[i] = _running[1]
         _exit = _running[2]
         _running = _running[0]
         
@@ -96,12 +104,13 @@ for i in tqdm(range(training_games)):
     if _exit:
         training_games = i + 1
         break 
+
+if initObjekt.saveTrainingData:
+    # save traiined state in s json file 
+    with open(filename, 'w') as fp:
+        json.dump(stateDict.stateHash, fp, indent=4)
     
-# save traiined state in s json file 
-with open(filename, 'w') as fp:
-    json.dump(stateDict.stateHash, fp, indent=4)
-    
-pyplot.plot(range(training_games), steps) 
+pyplot.plot(range(training_games), EatenApples) 
 pyplot.show()
 
 

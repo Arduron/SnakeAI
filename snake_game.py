@@ -9,20 +9,12 @@ from gameobjects import *
 
  
 class App:
-    SpielfeldBreite = 17
-    SpielfeldHöhe = 17
-
-    PixelBreite = 21
-    windowWidth = PixelBreite * SpielfeldBreite
-    windowHeight = PixelBreite * SpielfeldHöhe
-
-    spielzahl = 0
-    gesamtpunkte = 0
-    maxpunkte = 0
- 
-    def __init__(self):
-        self.Data_in = []
-        self.Data_out = []
+    PixelBreite = 21 
+    def __init__(self, initObjekt):
+        self.SpielfeldBreite = initObjekt.spielfeldgöße[0] + 2
+        self.SpielfeldHöhe = initObjekt.spielfeldgöße[1] + 2
+        self.windowWidth = self.PixelBreite * self.SpielfeldBreite
+        self.windowHeight = self.PixelBreite * self.SpielfeldHöhe
         self._running = True
         self._exit = False
         self._display_surf = None
@@ -30,21 +22,18 @@ class App:
         self._apple_surf = None
         self._wall_surf = None
         self.game = Game()
-        self.player = Player(3, self.PixelBreite) 
+        self.player = Player(initObjekt.originalSnakeLength, self.PixelBreite) 
         self.apple = Apple(randint(1,self.SpielfeldBreite-2),randint(1,self.SpielfeldHöhe-2), self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wall = Wall(self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
-        App.spielzahl = App.spielzahl + 1
         self.wallhit = 0
         self.appleHit = 0
         self.appleAngle = 0
         self.blocked = [0,0,0]
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
-        
-
         self.stepssurvived = 0
 
-
+        self.initObjekt = initObjekt
  
     def on_init(self):
         pygame.init()
@@ -56,15 +45,6 @@ class App:
         self._apple_surf = pygame.image.load("art/apple.png").convert()
         self._wall_surf = pygame.image.load("art/wall.png").convert()
 
-    def text_typer(self,text) :
-        self.font = pygame.font.SysFont("arial", 25)
-        self.text = self.font.render(text, True, (255, 255, 255))
-
-        self.textrect = self.text.get_rect()
-        self.textrect.centerx = self._display_surf.get_rect().centerx
-        self.textrect.centery = self._display_surf.get_rect().centery
-
- 
     def on_event(self, event):
         if event.type == QUIT:
             self._running = False
@@ -77,10 +57,6 @@ class App:
             if self.game.isCollision(self.apple.x,self.apple.y,self.player.x[i], self.player.y[i],self.PixelBreite-1):
                 self.apple.drop(self.player)
                 self.player.length = self.player.length + 1
-                App.gesamtpunkte = App.gesamtpunkte + 1
-                if self.player.length-3 > App.maxpunkte:
-                    App.maxpunkte = self.player.length-3
-
                 self.appleHit = 1
  
  
@@ -107,18 +83,11 @@ class App:
         self.player.draw(self._display_surf, self._snake_surf)
         self.apple.draw(self._display_surf, self._apple_surf)
         self.wall.draw(self._display_surf, self._wall_surf)
-        self._display_surf.blit(self.text, self.textrect)
     
         #pygame.display.update() 
         pygame.display.flip()
  
     def on_cleanup(self):
-        file2write=open("input.txt",'a')
-        file2write.write(str(self.Data_in))
-        file2write.close()
-        file2write=open("output.txt",'a')
-        file2write.write(str(self.Data_out))
-        file2write.close()
         pygame.quit()
 
     def on_startup(self):
@@ -135,14 +104,6 @@ class App:
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
 
-        #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
-        #inData = [self.appledir[0], self.appledir[1], self.snakedir[0], self.snakedir[1], self.blocked[0], self.blocked[1], self.blocked[2]]
-        
-        #self.Data_in.append(inData)
-        #self.Data_out.append(virtualKey)
-        #print(direction(blocked, appledir, snakedir))
-        #print(virtualKey)
-
         if (keys[K_RIGHT] or virtualKey == "Right"):
             self.player.moveRight()
 
@@ -158,12 +119,11 @@ class App:
         if (keys[K_ESCAPE]):
             self._exit = True
 
-        #print(direction(self.player, self.apple))
-        average = int(self.gesamtpunkte / self.spielzahl)
-        self.text_typer("Momentan:" + str(self.player.length-3) + "  Average:" + str(average) + "  max:" + str(self.maxpunkte))
         self.on_loop()
         self.on_render()
-        time.sleep (10.0 / 1000.0)
+
+        if self.initObjekt.verzögern:
+            time.sleep (self.initObjekt.verzögerung)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
