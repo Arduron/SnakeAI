@@ -107,7 +107,7 @@ for i in tqdm(range(initObjekt.training_games)):
 
         
     #plot statistics
-    statistics.animatePlot(stateDict, EatenApples)
+    statistics.on_running(stateDict, EatenApples)
     if _exit:
         training_games = i + 1
         break 
