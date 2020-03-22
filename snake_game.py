@@ -40,6 +40,7 @@ class App:
         self.blocked = [0,0,0]
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
+        self.snakeCenterAngle = 0
         
 
         self.stepssurvived = 0
@@ -134,6 +135,7 @@ class App:
         self.snakedir = getCurrentDirection(self.player)
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
+        self.snakeCenterAngle = self.getSnakeCenterAngle()
 
         #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
         #inData = [self.appledir[0], self.appledir[1], self.snakedir[0], self.snakedir[1], self.blocked[0], self.blocked[1], self.blocked[2]]
@@ -163,11 +165,11 @@ class App:
         self.text_typer("Momentan:" + str(self.player.length-3) + "  Average:" + str(average) + "  max:" + str(self.maxpunkte))
         self.on_loop()
         self.on_render()
-        time.sleep (10.0 / 1000.0)
+        time.sleep (50.0 / 1000.0)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
-        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.snakedir[0], self.snakedir[1]))
+        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
 
     def getResult(self):
         appleZw = self.appleHit
@@ -178,6 +180,27 @@ class App:
 
     def getAppleDis(self):
         return (math.sqrt(self.appledir[0]**2 + self.appledir[1]**2))
+    
+    def getSnakeCenterAngle(self):
+        xCenter = 0
+        yCenter = 0
+        #Schwerpunkt der Schlange in x und y bestimmen (ohne Kopf):
+        for i in range(1, self.player.length):
+            xCenter = xCenter + self.player.x[i]
+            yCenter = yCenter + self.player.y[i]
+        #x- und y-Koordinaten mitteln für Schwerpunkt:
+        xCenter = xCenter / (self.player.length - 1)
+        yCenter = yCenter / (self.player.length - 1)
+        #Berechne Richtung zum Schwerpunkt:
+        centerDir = [xCenter - self.player.x[0], yCenter - self.player.y[0]]
+        #Berechne Winkel:
+        angle = math.atan2(centerDir[1] * self.snakedir[0] - centerDir[0] * self.snakedir[1], centerDir[1] * self.snakedir[1] + centerDir[0] * self.snakedir[0])/ math.pi
+        angle = round(angle * 8) / 8
+        #print(angle)
+        return angle
+
+
+
 
 
 
