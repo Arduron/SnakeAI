@@ -2,20 +2,23 @@ from snake_game import App
 from tqdm import tqdm
 from qAufsatz import StateDict
 from policymaker import QPolicy
+from statistics import Stats
 from os import path
+import matplotlib.animation as animation
 from settings import InitObject
 
 import json
-
 from matplotlib import pyplot 
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 100
-askToLoad = False
-saveTrainingData = False
+training_games = 5000
+askToLoad = True
+saveTrainingData = True
+plotStats = True
+plotInervall = 300
 
-initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData)
+initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
 
 
@@ -50,6 +53,12 @@ while path.exists(filename):
 EatenApples = []
 _exit = False
 
+# for sttistics
+if plotStats:
+    statistics = Stats(initObjekt)
+    goPlot = input('Plot data? (y/n) ')
+    if goPlot == 'y':
+        statistics.on_init()
 
 for i in tqdm(range(initObjekt.training_games)):
     
@@ -101,6 +110,13 @@ for i in tqdm(range(initObjekt.training_games)):
             reward = 0 + rewardDis
         stateDict.QUpdate(currentState, nextAction, snakeGame.getState(), reward)
 
+        
+    #plot statistics
+    if plotStats:
+        statistics.update(stateDict, EatenApples[i])
+        if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
+            statistics.on_running()
+
     if _exit:
         training_games = i + 1
         break 
@@ -110,7 +126,17 @@ if initObjekt.saveTrainingData:
     with open(filename, 'w') as fp:
         json.dump(stateDict.stateHash, fp, indent=4)
     
-pyplot.plot(range(training_games), EatenApples) 
+# save traiined state in s json file 
+with open(filename, 'w') as fp:
+    json.dump(stateDict.stateHash, fp, indent=4)
+
+if initObjekt.plotStats:
+    statistics.on_init()
+    statistics.on_running()
+    pyplot.pause(100)
+# fig2 = pyplot.figure()
+# ax2 = fig2.add_subplot(1,1,1)  
+# ax2.plot(range(training_games), EatenApples) 
 pyplot.show()
 
 

@@ -9,15 +9,16 @@ saveTrainingData = True
 #uncommon
 originalSnakeLength = 3
 learningrate = 0.2
-diskontierung = 0.8
-epsilonStart = 0.9
+diskontierung = 0.9
+epsilonStart = 0.7
 epsilonDiscount = 0.99
 verzögerung = 20.0/1000.0
+plotIntervall = 10
 
 
 
 class InitObject:
-    def __init__(self, verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData):
+    def __init__(self, verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotIntervall):
         self.verzögern = verzögern
         self.spielfeldgöße = spielfeldgöße
         self.originalSnakeLength = originalSnakeLength
@@ -29,4 +30,8 @@ class InitObject:
         self.askToLoad = askToLoad
         self.verzögerung = verzögerung
         self.saveTrainingData = saveTrainingData
+        self.plotStats = plotStats
+        self.plotIntervall = plotIntervall
+        self.meanQrange = 100
+        self.meanApplesEaten = 100
     
