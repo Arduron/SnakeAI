@@ -2,9 +2,9 @@ from random import randint
 import random 
 
 class QPolicy:
-    def __init__(self):
-        self.epsilonDiscount = 0.99
-        self.epsilonstart = 0.9
+    def __init__(self, initObjekt):
+        self.epsilonDiscount = initObjekt.epsilonDiscount
+        self.epsilonStart = initObjekt.epsilonStart
 
     def getAction(self, stateQ):
         maxKey = []
@@ -27,6 +27,6 @@ class QPolicy:
 
 
     def setEpsilon(self, episodeNumber):
-        self.epsilon = self.epsilonstart * self.epsilonDiscount ** episodeNumber
+        self.epsilon = self.epsilonStart * self.epsilonDiscount ** episodeNumber
 
         
