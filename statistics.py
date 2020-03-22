@@ -15,7 +15,7 @@ class Stats:
         self.update(lenDict)
         self.ax1.clear()
         self.ax1.plot(range(len(self.numberofQ)), self.numberofQ)
-        plt.draw()
+        plt.draw()git
 
     def updatePlot(self, stateDict):
         ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)

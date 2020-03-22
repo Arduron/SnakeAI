@@ -1,11 +1,6 @@
 from random import randint
+
 class Apple:
-    x = 0
-    y = 0
-    step = 44
-    hoehe = 0
-    breite = 0
- 
     def __init__(self,x,y,PixelGroese, hoehe, breite):
         self.step = PixelGroese
         self.breite = breite
@@ -25,16 +20,12 @@ class Apple:
                     self.y = randint(1,self.hoehe-2) * self.step
                 else:
                     collision = False
-
-
     
     def draw(self, surface, image):
         surface.blit(image,(self.x, self.y)) 
  
  
-class Player:
-    
- 
+class Player: 
     def __init__(self, length, PixelGroese):
         self.x = [3]
         self.y = [3]
@@ -94,8 +85,6 @@ class Player:
             surface.blit(image,(self.x[i],self.y[i])) 
 
 class Wall:
-
-
     def __init__(self, PixelBreite, SpielfeldHöhe, SpielfeldBreite):
         self.x = []
         self.y = []
@@ -122,3 +111,5 @@ class Game:
             if y1 >= y2 and y1 <= y2 + bsize:
                 return True
         return False
+
+
