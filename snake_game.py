@@ -136,7 +136,7 @@ class App:
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
         #print(self.blocked)
-        self.snakeCenterAngle = self.getSnakeCenterAngle()
+        #self.snakeCenterAngle = self.getSnakeCenterAngle()
 
         #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
         #inData = [self.appledir[0], self.appledir[1], self.snakedir[0], self.snakedir[1], self.blocked[0], self.blocked[1], self.blocked[2]]
@@ -170,7 +170,7 @@ class App:
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
-        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
+        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1]))
 
     def getResult(self):
         appleZw = self.appleHit
