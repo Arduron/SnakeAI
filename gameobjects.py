@@ -1,12 +1,6 @@
 from random import randint
 
 class Apple:
-    x = 0
-    y = 0
-    step = 44
-    hoehe = 0
-    breite = 0
- 
     def __init__(self,x,y,PixelGroese, hoehe, breite):
         self.step = PixelGroese
         self.breite = breite
