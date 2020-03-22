@@ -9,8 +9,8 @@ saveTrainingData = True
 #uncommon
 originalSnakeLength = 3
 learningrate = 0.2
-diskontierung = 0.8
-epsilonStart = 0.9
+diskontierung = 0.9
+epsilonStart = 0.7
 epsilonDiscount = 0.99
 verzögerung = 20.0/1000.0
 plotIntervall = 10

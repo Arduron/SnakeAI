@@ -12,11 +12,11 @@ from matplotlib import pyplot
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 200
-askToLoad = False
-saveTrainingData = False
+training_games = 5000
+askToLoad = True
+saveTrainingData = True
 plotStats = True
-plotInervall = 10
+plotInervall = 300
 
 initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
