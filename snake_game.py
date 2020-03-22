@@ -37,11 +37,10 @@ class App:
         self.wallhit = 0
         self.appleHit = 0
         self.appleAngle = 0
-        self.blocked = [0,0,0]
+        self.blocked = [0,0,0, 0,0,0,0,0,0,0] #Die ersten drei Stellen für direkte Blocks, danach sieben Stellen für die Strahlen
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
         self.snakeCenterAngle = 0
-        self.directionsBlocked = [0,0,0,0,0,0,0]
         
 
         self.stepssurvived = 0
@@ -127,7 +126,7 @@ class App:
         if self.on_init() == False:
             self._running = False
     def on_execute(self, virtualKey):
-        #virtualKey = 0
+        virtualKey = 0
         
         pygame.event.pump()
         keys = pygame.key.get_pressed() 
@@ -136,8 +135,8 @@ class App:
         self.snakedir = getCurrentDirection(self.player)
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
+        print(self.blocked)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
-        self.directionsBlocked = self.getDirectionsBlocked()
 
         #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
         #inData = [self.appledir[0], self.appledir[1], self.snakedir[0], self.snakedir[1], self.blocked[0], self.blocked[1], self.blocked[2]]
@@ -167,11 +166,11 @@ class App:
         self.text_typer("Momentan:" + str(self.player.length-3) + "  Average:" + str(average) + "  max:" + str(self.maxpunkte))
         self.on_loop()
         self.on_render()
-        time.sleep (50.0 / 1000.0)
+        time.sleep (100.0 / 1000.0)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
-        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
+        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
 
     def getResult(self):
         appleZw = self.appleHit
@@ -201,8 +200,7 @@ class App:
         #print(angle)
         return angle
 
-    def getDirectionsBlocked(self):
-        directionsBlocked = [0,0,0,0,0,0,0]
+
         
 
 

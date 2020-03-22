@@ -61,9 +61,6 @@ def getAppleDirection(snake, apple):
 
 def getBlocked(snake, wall, step, game):
     direction = getCurrentDirection(snake)
-    front = [0,0]
-    left = [0,0]
-    right = [0,0]
     #Variablen für Koordinaten der Blöcke in der jeweiligen Richtung, immer mit [x1,x2,(x3),y1,y2,(y3)]
     leftBackBlocks = [0,0,0,0,0,0]
     leftBlocks = [0,0,0,0]
@@ -73,23 +70,23 @@ def getBlocked(snake, wall, step, game):
     rightBlocks = [0,0,0,0]
     rightBackBlocks = [0,0,0,0,0,0]
 
-    for i in range(1, len(frontBlocks) / 2):
-        frontBlocks[i-1] = snake.x[0] + direction[0] * step * i
-        frontBlocks[i+1] = snake.y[0] + direction[1] * step * i
+    for i in range(1, int(len(frontBlocks) / 2)):
         leftBlocks[i-1] = snake.x[0] + direction[1] * step * i
         leftBlocks[i+1] = snake.y[0] - direction[0] * step * i
+        frontBlocks[i-1] = snake.x[0] + direction[0] * step * i
+        frontBlocks[i+1] = snake.y[0] + direction[1] * step * i
         rightBlocks[i-1] = snake.x[0] - direction[1] * step * i
         rightBlocks[i+1] = snake.y[0] + direction[0] * step * i
 
-    for i in range(1, len(leftFrontBlocks) / 2):
-        leftBackBlocks[i-1] = snake.x[0] + (direction[0] + direction[1]) * step * i
-        leftBackBlocks[i+1] = snake.y[0] + (direction[0] + direction[1]) * step * i
+    for i in range(1, int(len(leftFrontBlocks) / 2)):
+        leftBackBlocks[i-1] = snake.x[0] + ((-1) * direction[0] + direction[1]) * step * i
+        leftBackBlocks[i+1] = snake.y[0] + ((-1) * direction[0] - direction[1]) * step * i
         leftFrontBlocks[i-1] = snake.x[0] + (direction[0] + direction[1]) * step * i
-        leftFrontBlocks[i+1] = snake.y[0] + (direction[0] + direction[1]) * step * i
-        rightFrontBlocks[i-1] = snake.x[0] + (direction[0] + direction[1]) * step * i
+        leftFrontBlocks[i+1] = snake.y[0] + ((-1) * direction[0] + direction[1]) * step * i
+        rightFrontBlocks[i-1] = snake.x[0] + (direction[0] - direction[1]) * step * i
         rightFrontBlocks[i+1] = snake.y[0] + (direction[0] + direction[1]) * step * i
-        rightBackBlocks[i-1] = snake.x[0] + (direction[0] + direction[1]) * step * i
-        rightBackBlocks[i+1] = snake.y[0] + (direction[0] + direction[1]) * step * i
+        rightBackBlocks[i-1] = snake.x[0] + ((-1) * direction[0] - direction[1]) * step * i
+        rightBackBlocks[i+1] = snake.y[0] + (direction[0] - direction[1]) * step * i
 
     blockedResult = [0,0,0] #index 0 for left, 1 for front, 2 for right 
     blockedDirResult = [0,0,0,0,0,0,0] #left0, front1, right2, leftBack3, leftFront4, rightFront5, rightBack6
@@ -155,11 +152,32 @@ def getBlocked(snake, wall, step, game):
                 blockedDirResult[2] = 1
     
     #Jetzt für die diagonalen:
-    for k in range(1,len(leftFrontBlocks) / 2):
+    k = 0
+    while (blockedDirResult[3] == 0 and k < 3):
         for i in range(1,snake.length):
-            if game.isCollision(leftBlocks[1], leftBlocks[3], snake.x[i], snake.y[i], step-1):
-
-        
+            if game.isCollision(leftBackBlocks[k], leftBackBlocks[k+3], snake.x[i], snake.y[i], step-1):
+                blockedDirResult[3] = 1
+                break
+    k = 0
+    while (blockedDirResult[4] == 0 and k < 3):
+        for i in range(1,snake.length):
+            if game.isCollision(leftFrontBlocks[k], leftFrontBlocks[k+3], snake.x[i], snake.y[i], step-1):
+                blockedDirResult[4] = 1
+                break
+    k = 0
+    while (blockedDirResult[5] == 0 and k < 3):
+        for i in range(1,snake.length):
+            if game.isCollision(rightFrontBlocks[k], rightFrontBlocks[k+3], snake.x[i], snake.y[i], step-1):
+                blockedDirResult[5] = 1
+                break
+    k = 0
+    while (blockedDirResult[6] == 0 and k < 3):
+        for i in range(1,snake.length):
+            if game.isCollision(rightBackBlocks[k], rightBackBlocks[k+3], snake.x[i], snake.y[i], step-1):
+                blockedDirResult[6] = 1
+                break
+    # Gesamt-Result ist eine Liste mit erst den direkten und dann den Strahlen
+    result = blockedResult + blockedDirResult    
     return result
            
 def angle_with_apple(snakedir, appledir):
