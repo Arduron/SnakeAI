@@ -41,6 +41,7 @@ class App:
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
         self.snakeCenterAngle = 0
+        self.directionsBlocked = [0,0,0,0,0,0,0]
         
 
         self.stepssurvived = 0
@@ -136,6 +137,7 @@ class App:
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
+        self.directionsBlocked = self.getDirectionsBlocked()
 
         #virtualKey = getKey(snakedir, direction(self.blocked, self.appledir, self.snakedir))
         #inData = [self.appledir[0], self.appledir[1], self.snakedir[0], self.snakedir[1], self.blocked[0], self.blocked[1], self.blocked[2]]
@@ -198,6 +200,10 @@ class App:
         angle = round(angle * 8) / 8
         #print(angle)
         return angle
+
+    def getDirectionsBlocked(self):
+        directionsBlocked = [0,0,0,0,0,0,0]
+        
 
 
 
