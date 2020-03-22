@@ -2,14 +2,15 @@ from snake_game import App
 from tqdm import tqdm
 from qAufsatz import StateDict
 from policymaker import QPolicy
+from statistics import Stats
 from os import path
+import matplotlib.animation as animation
 
 import json
-
 from matplotlib import pyplot 
     
 
-training_games = 1000000
+training_games = 10
 
 stateDict = StateDict()
 polititian = QPolicy()
@@ -41,6 +42,9 @@ while path.exists(filename):
 
 steps = []
 _exit = False
+
+# for sttistics
+statistics = Stats()
 
 
 for i in tqdm(range(training_games)):
@@ -93,6 +97,9 @@ for i in tqdm(range(training_games)):
             reward = 0 + rewardDis
         stateDict.QUpdate(currentState, nextAction, snakeGame.getState(), reward)
 
+        #plot statistics
+        statistics.animatePlot(stateDict)
+
     if _exit:
         training_games = i + 1
         break 
@@ -100,8 +107,10 @@ for i in tqdm(range(training_games)):
 # save traiined state in s json file 
 with open(filename, 'w') as fp:
     json.dump(stateDict.stateHash, fp, indent=4)
-    
-pyplot.plot(range(training_games), steps) 
+
+fig2 = pyplot.figure()
+ax2 = fig2.add_subplot(1,1,1)  
+ax2.plot(range(training_games), steps) 
 pyplot.show()
 
 
