@@ -105,9 +105,9 @@ for i in tqdm(range(initObjekt.training_games)):
             reward = 0 + rewardDis
         stateDict.QUpdate(currentState, nextAction, snakeGame.getState(), reward)
 
-        #plot statistics
-        statistics.animatePlot(stateDict)
-
+        
+    #plot statistics
+    statistics.animatePlot(stateDict, EatenApples)
     if _exit:
         training_games = i + 1
         break 
@@ -121,9 +121,9 @@ if initObjekt.saveTrainingData:
 with open(filename, 'w') as fp:
     json.dump(stateDict.stateHash, fp, indent=4)
 
-fig2 = pyplot.figure()
-ax2 = fig2.add_subplot(1,1,1)  
-ax2.plot(range(training_games), steps) 
+# fig2 = pyplot.figure()
+# ax2 = fig2.add_subplot(1,1,1)  
+# ax2.plot(range(training_games), EatenApples) 
 pyplot.show()
 
 
