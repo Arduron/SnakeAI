@@ -7,6 +7,8 @@ class Stats:
     def __init__(self):
         self.numberofQ = []
         self.applesEaten = []
+        self.meanQchange = []
+        
         self.fig = plt.figure()
         self.length = len(self.numberofQ)
         self.ax1 = self.fig.add_subplot(3,1,1)
@@ -24,6 +26,7 @@ class Stats:
     def update(self, stateDict, eatenApple):
         self.numberofQ.append(len(stateDict.stateHash))
         self.applesEaten = eatenApple
+        self.meanQchange.append(stateDict.getMeanQ())
         self.length = len(self.numberofQ)
 
     def on_running(self, lenDict, eatenApple):
@@ -31,10 +34,10 @@ class Stats:
         #Update data (with the new _and_ the old points)
         self.lines1.set_xdata(range(self.length))
         self.lines2.set_xdata(range(len(self.applesEaten)))
-        self.lines3.set_xdata(range(len(self.applesEaten)))
+        self.lines3.set_xdata(range(self.length))
         self.lines1.set_ydata(self.numberofQ)
         self.lines2.set_ydata(self.applesEaten)
-        self.lines3.set_ydata(self.applesEaten)
+        self.lines3.set_ydata(self.meanQchange)
         #Need both of these in order to rescale
         self.ax1.relim()
         self.ax1.autoscale_view()
