@@ -13,6 +13,7 @@ training_games = 15
 
 stateDict = StateDict()
 polititian = QPolicy()
+baseName = 'TrainedModels/trainedState'
 
 load = input('Load existing model? (y/n) ')
 
@@ -20,9 +21,11 @@ if load == 'y':
     train = input('Continue training? (y/n) ')
     if train == 'n':
         polititian.epsilon = 0
+    
     #ask for model number to load 
     modelNr = input('Model number = ')
-    filename = 'trainedState' + modelNr + '.json'
+    filename = baseName + modelNr + '.json'
+
     #import training data isf existant 
     if path.exists(filename):
         with open(filename, 'r') as fp:
@@ -30,10 +33,10 @@ if load == 'y':
 
 #create new filename
 modelNr = 1
-filename = 'trainedState' + str(modelNr) + '.json'
+filename = baseName + str(modelNr) + '.json'
 while path.exists(filename):
     modelNr = int(modelNr) + 1
-    filename = 'trainedState' + str(modelNr) + '.json'
+    filename = baseName + str(modelNr) + '.json'
     
 
 steps = []
