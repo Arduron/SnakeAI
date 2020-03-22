@@ -2,37 +2,60 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 import numpy
+
 plt.ion()
 class Stats:
-    def __init__(self):
+    def __init__(self, initObjekt):
         self.numberofQ = []
         self.applesEaten = []
         self.meanQchange = []
+        self.meanApplesEaten = []
+        self.initObject = initObjekt
 
     def on_init(self):
-        self.fig, self.axs = plt.subplots(3, 1, constrained_layout=True)
+        self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)
         self.length = len(self.numberofQ)
-        # self.axs[0] = self.fig.add_subplot(3,1,1)
-        # self.axs[1] = self.fig.add_subplot(3,1,2)
-        # self.axs[2] = self.fig.add_subplot(3,1,3)
-        self.lines1, = self.axs[0].plot([],[])
-        self.lines2, = self.axs[1].plot([],[])
-        self.lines3, = self.axs[2].plot([],[])
+        # self.axs[0,0] = self.fig.add_subplot(3,1,1)
+        # self.axs[1,0] = self.fig.add_subplot(3,1,2)
+        # self.axs[2,0] = self.fig.add_subplot(3,1,3)
+        self.lines1, = self.axs[0,0].plot([],[])
+        self.lines2, = self.axs[1,0].plot([],[])
+        self.lines3, = self.axs[2,0].plot([],[])
+        self.lines4, = self.axs[0,1].plot([],[])
+        self.lines5, = self.axs[1,1].plot([],[])
+        self.lines6, = self.axs[2,1].plot([],[])
+
         #Autoscale on unknown axis and known lims on the other
-        self.axs[0].set_autoscaley_on(True)
-        self.axs[1].set_autoscaley_on(True)
-        self.axs[2].set_autoscaley_on(True)
-        self.axs[0].grid()
-        self.axs[1].grid()
-        self.axs[2].grid()
-        self.axs[0].set_title('No. of states')
-        self.axs[1].set_title('Apples eaten')
-        self.axs[2].set_title('Mean Q change')
+        self.axs[0,0].set_autoscaley_on(True)
+        self.axs[1,0].set_autoscaley_on(True)
+        self.axs[2,0].set_autoscaley_on(True)
+        self.axs[0,0].grid()
+        self.axs[1,0].grid()
+        self.axs[2,0].grid()
+        self.axs[0,1].grid()
+        self.axs[1,1].grid()
+        self.axs[2,1].grid()
+        self.axs[0,0].set_title('No. of states')
+        self.axs[1,0].set_title('Apples eaten')
+        self.axs[2,0].set_title('Mean Q change')
+        self.axs[0,1].set_title('Mean apples Eaten')
+        self.axs[1,1].set_title(' ')
+        self.axs[2,1].set_title(' ')
 
 
     def update(self, stateDict, eatenApple):
         self.numberofQ.append(len(stateDict.stateHash))
-        self.applesEaten = eatenApple
+        self.applesEaten.append(eatenApple - self.initObject.originalSnakeLength)
+        
+        start = len(self.applesEaten) - self.initObject.meanApplesEaten
+        newMean = 0
+        if start < 0:
+            start = 0
+        for i in range(start, len(self.applesEaten)):
+            newMean = newMean + self.applesEaten[i]
+        newMean = newMean / (len(self.applesEaten) - start)
+        self.meanApplesEaten.append(newMean)
+
         self.meanQchange.append(stateDict.getMeanQ())
         self.length = len(self.numberofQ)
 
@@ -41,16 +64,28 @@ class Stats:
         self.lines1.set_xdata(range(self.length))
         self.lines2.set_xdata(range(len(self.applesEaten)))
         self.lines3.set_xdata(range(self.length))
+        self.lines4.set_xdata(range(self.length))
+        # self.lines5.set_xdata(range(len(self.applesEaten)))
+        # self.lines6.set_xdata(range(self.length))
         self.lines1.set_ydata(self.numberofQ)
         self.lines2.set_ydata(self.applesEaten)
         self.lines3.set_ydata(self.meanQchange)
+        self.lines4.set_ydata(self.meanApplesEaten)
+        # self.lines5.set_ydata(self.applesEaten)
+        # self.lines6.set_ydata(self.meanQchange)
         #Need both of these in order to rescale
-        self.axs[0].relim()
-        self.axs[0].autoscale_view()
-        self.axs[1].relim()
-        self.axs[1].autoscale_view()
-        self.axs[2].relim()
-        self.axs[2].autoscale_view()
+        self.axs[0,0].relim()
+        self.axs[0,0].autoscale_view()
+        self.axs[1,0].relim()
+        self.axs[1,0].autoscale_view()
+        self.axs[2,0].relim()
+        self.axs[2,0].autoscale_view()
+        self.axs[0,1].relim()
+        self.axs[0,1].autoscale_view()
+        self.axs[1,1].relim()
+        self.axs[1,1].autoscale_view()
+        self.axs[2,1].relim()
+        self.axs[2,1].autoscale_view()
         #We need to draw *and* flush
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()

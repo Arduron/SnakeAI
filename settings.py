@@ -33,4 +33,5 @@ class InitObject:
         self.plotStats = plotStats
         self.plotIntervall = plotIntervall
         self.meanQrange = 100
+        self.meanApplesEaten = 100
     

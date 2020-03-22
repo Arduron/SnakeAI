@@ -16,7 +16,7 @@ training_games = 200
 askToLoad = False
 saveTrainingData = False
 plotStats = True
-plotInervall = 100
+plotInervall = 10
 
 initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
@@ -55,7 +55,7 @@ _exit = False
 
 # for sttistics
 if plotStats:
-    statistics = Stats()
+    statistics = Stats(initObjekt)
     goPlot = input('Plot data? (y/n) ')
     if goPlot == 'y':
         statistics.on_init()
@@ -114,7 +114,7 @@ for i in tqdm(range(initObjekt.training_games)):
         
     #plot statistics
     if plotStats:
-        statistics.update(stateDict, EatenApples)
+        statistics.update(stateDict, EatenApples[i])
         if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
             statistics.on_running()
 
