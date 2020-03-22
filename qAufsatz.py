@@ -1,10 +1,13 @@
 from collections import deque
+from settings import InitObject
+
 
 class StateDict:
     def __init__(self, initObjekt):
         self.stateHash = {str((0)):{"Up":1, "Down":1, "Right":1, "Left":1}}
         self.learningrate = initObjekt.learningrate
         self.diskontierung = initObjekt.diskontierung
+        self.initObject = initObjekt
         self.Qchange = deque([])
         self.sumQ = 0 
 
@@ -20,7 +23,7 @@ class StateDict:
         addQ = self.learningrate * (reward + self.diskontierung * maxQ - stateQ[action])
         self.stateHash[state][action] = stateQ[action] + addQ
 
-        if len(self.Qchange) == 1000:
+        if len(self.Qchange) == self.initObject.meanQrange:
             self.Qchange.pop()
         self.Qchange.append(abs(addQ))
 

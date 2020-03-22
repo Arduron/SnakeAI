@@ -32,4 +32,5 @@ class InitObject:
         self.saveTrainingData = saveTrainingData
         self.plotStats = plotStats
         self.plotIntervall = plotIntervall
+        self.meanQrange = 100
     
