@@ -70,9 +70,7 @@ class Stats:
         self.length = len(self.numberofQ)
 
     def on_running(self, i):
-        if self.goPlot == 'y' and i%self.initObject.plotIntervall == 0 or i == (self.initObject.training_games - 1): 
-            if i == (self.initObject.training_games - 1):
-                self.init_plots()
+        if self.goPlot == 'y' and i%self.initObject.plotIntervall == 0: 
             #Update data (with the new _and_ the old points)
             self.lines1.set_xdata(range(self.length))
             self.lines2.set_xdata(range(len(self.applesEaten)))
@@ -101,16 +99,19 @@ class Stats:
             self.axs[2,1].autoscale_view()
             #We need to draw *and* flush
             self.fig.canvas.draw()
-            self.fig.canvas.flush_events()
-            #if i == (self.initObject.training_games - 1):
-                # plt.show()
-                # self.safeIt()
+            if i == 0:
+                self.fig.canvas.flush_events()
+            
     
-    # def safeIt(self):
-    #     modelNr = 1
-    #     filename = self.baseName + str(modelNr) + '.png'
-    #     while path.exists(filename):
-    #         modelNr = int(modelNr) + 1
-    #         filename = self.baseName + str(modelNr) + '.png'
-    #     self.safefig(filename)
+    def safeIt(self):
+        self.init_plots()
+        self.goPlot = 'y'
+        self.on_running(0)
+        modelNr = 1
+        filename = self.baseName + str(modelNr) + '.png'
+        while path.exists(filename):
+            modelNr = int(modelNr) + 1
+            filename = self.baseName + str(modelNr) + '.png'
+        self.fig.savefig(filename)
+        self.fig.canvas.flush_events()
 

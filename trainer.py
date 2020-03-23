@@ -13,7 +13,7 @@ from helperfunctions import SaveStuff
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 5000
+training_games = 300
 askToLoad = True
 saveTrainingData = True
 plotStats = True
@@ -91,6 +91,8 @@ for i in tqdm(range(initObject.training_games)):
         training_games = i + 1
         break 
 
+#save statistics plot
+statistics.safeIt()
 
 #save Training Data and Stats 
 if initObject.saveTrainingData:
