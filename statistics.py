@@ -5,12 +5,12 @@ import numpy
 
 plt.ion()
 class Stats:
-    def __init__(self, initObjekt):
+    def __init__(self, initObject):
         self.numberofQ = []
         self.applesEaten = []
         self.meanQchange = []
         self.meanApplesEaten = []
-        self.initObject = initObjekt
+        self.initObject = initObject
 
     def getStats(self):
         return {'numberofQ': self.numberofQ, 'applesEaten': self.applesEaten, 'meanQchane': self.meanQchange, 'meanApplesEaten': self.meanApplesEaten}

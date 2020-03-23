@@ -10,9 +10,9 @@ from gameobjects import *
  
 class App:
     PixelBreite = 21 
-    def __init__(self, initObjekt):
-        self.SpielfeldBreite = initObjekt.spielfeldgöße[0] + 2
-        self.SpielfeldHöhe = initObjekt.spielfeldgöße[1] + 2
+    def __init__(self, initObject):
+        self.SpielfeldBreite = initObject.spielfeldgöße[0] + 2
+        self.SpielfeldHöhe = initObject.spielfeldgöße[1] + 2
         self.windowWidth = self.PixelBreite * self.SpielfeldBreite
         self.windowHeight = self.PixelBreite * self.SpielfeldHöhe
         self._running = True
@@ -22,13 +22,13 @@ class App:
         self._apple_surf = None
         self._wall_surf = None
         self.game = Game()
-        self.player = Player(initObjekt.originalSnakeLength, self.PixelBreite) 
+        self.player = Player(initObject.originalSnakeLength, self.PixelBreite) 
         self.apple = Apple(randint(1,self.SpielfeldBreite-2),randint(1,self.SpielfeldHöhe-2), self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wall = Wall(self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wallhit = 0
         self.appleHit = 0
         self.appleAngle = 0
-        self.blocked = [0,0,0]
+        self.blocked = [0,0,0, 0,0,0,0,0,0,0] #Die ersten drei Stellen für direkte Blocks, danach sieben Stellen für die Strahlen
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
         self.snakeCenterAngle = 0
@@ -36,7 +36,7 @@ class App:
 
         self.stepssurvived = 0
 
-        self.initObjekt = initObjekt
+        self.initObject = initObject
  
     def on_init(self):
         pygame.init()
@@ -106,6 +106,7 @@ class App:
         self.snakedir = getCurrentDirection(self.player)
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
+        #print(self.blocked)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
 
         if (keys[K_RIGHT] or virtualKey == "Right"):
@@ -126,12 +127,12 @@ class App:
         self.on_loop()
         self.on_render()
 
-        if self.initObjekt.verzögern:
-            time.sleep (self.initObjekt.verzögerung)
+        if self.initObject.verzögern:
+            time.sleep (self.initObject.verzögerung)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
-        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
+        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
 
     def getResult(self):
         appleZw = self.appleHit
@@ -157,9 +158,11 @@ class App:
         centerDir = [xCenter - self.player.x[0], yCenter - self.player.y[0]]
         #Berechne Winkel:
         angle = math.atan2(centerDir[1] * self.snakedir[0] - centerDir[0] * self.snakedir[1], centerDir[1] * self.snakedir[1] + centerDir[0] * self.snakedir[0])/ math.pi
-        angle = round(angle * 8) / 8
-        #print(angle)
+        angle = round(angle * 2) / 2
         return angle
+
+
+        
 
 
 
