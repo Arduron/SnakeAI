@@ -1,15 +1,16 @@
 from collections import deque
 from settings import InitObject
+from random import randint
+import random
 
 
 class StateDict:
-    def __init__(self, initObjekt):
-        self.stateHash = {str((0)):{"Up":1, "Down":1, "Right":1, "Left":1}}
-        self.learningrate = initObjekt.learningrate
-        self.diskontierung = initObjekt.diskontierung
-        self.initObject = initObjekt
+    def __init__(self, initObject):
+        self.stateHash = {"initial Entry":{"Up":1, "Down":1, "Right":1, "Left":1}}
+        self.learningrate = initObject.learningrate
+        self.diskontierung = initObject.diskontierung
+        self.initObject = initObject
         self.Qchange = deque([])
-        self.sumQ = 0 
 
     def addState(self,newState):
         if self.stateHash.get(newState) == None:
@@ -36,6 +37,34 @@ class StateDict:
             return sum(list(self.Qchange)) / len(self.Qchange)
         else:
             return 0
-        
+
+class QPolicy:
+    def __init__(self, initObject):
+        self.epsilonDiscount = initObject.epsilonDiscount
+        self.epsilonStart = initObject.epsilonStart
+        self.initObject = initObject
+
+    def getAction(self, stateQ):
+        maxKey = []
+        maxQ = max(stateQ.values())
+        if stateQ["Up"] == maxQ:
+            maxKey.append("Up")
+        if stateQ["Down"] == maxQ:
+            maxKey.append("Down")
+        if stateQ["Right"] == maxQ:
+            maxKey.append("Right")
+        if stateQ["Left"] == maxQ:
+            maxKey.append("Left")
+        maxChosen = maxKey[randint(0, len(maxKey)-1)]
+
+        if randint(0,self.initObject.epsilonMin) > self.initObject.epsilonMin * self.epsilon:
+            return maxChosen
+        else:
+           randKey = ["Up", "Down", "Right", "Left"]
+           return random.choice(randKey)
+
+
+    def setEpsilon(self, episodeNumber):
+        self.epsilon = self.epsilonStart * self.epsilonDiscount ** episodeNumber        
 
 
