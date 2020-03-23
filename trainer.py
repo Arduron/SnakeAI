@@ -16,7 +16,7 @@ training_games = 5000
 askToLoad = True
 saveTrainingData = True
 plotStats = True
-plotInervall = 300
+plotInervall = 200
 
 initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
@@ -103,7 +103,7 @@ for i in tqdm(range(initObjekt.training_games)):
         else:
             rewardDis = 0
         if result[0] == 1:
-            reward = 4 + rewardDis
+            reward = 1 + rewardDis
         elif result[1] == 1:
             reward = -1 + rewardDis
         else:
