@@ -9,28 +9,28 @@ from settings import InitObject
 
 import json
 from matplotlib import pyplot 
+from helperfunctions import SaveStuff
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 1000000
+training_games = 10
 askToLoad = True
 saveTrainingData = True
 plotStats = True
-plotInervall = 1000
+plotInervall = 5
 
 initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
 stateDict = StateDict(initObject)
-polititian = QPolicy(initObject)    
+polititian = QPolicy(initObject) 
+saveStuff = SaveStuff(initObject)  
+saveStuff.initSaving(stateDict, polititian)
 
-EatenApples = []
+EatenApples = 0
 
 # for sttistics
-if plotStats:
-    statistics = Stats(initObject)
-    goPlot = input('Plot data? (y/n) ')
-    if goPlot == 'y':
-        statistics.on_init()
+statistics = Stats(initObject)
+statistics.on_init()
 
 _exit = False
 for i in tqdm(range(initObject.training_games)):
@@ -39,7 +39,7 @@ for i in tqdm(range(initObject.training_games)):
     
     snakeGame = App(initObject)    
     polititian.setEpsilon(i)
-    EatenApples.append(0)
+    EatenApples = 0
     appleDis = snakeGame.getAppleDis()
 
     while _running and not _exit:
@@ -58,7 +58,7 @@ for i in tqdm(range(initObject.training_games)):
         #führe ihn aus
         _running = [0,0,0]
         _running = snakeGame.on_execute(nextAction)
-        EatenApples[i] = _running[1]
+        EatenApples = _running[1]
         _exit = _running[2]
         _running = _running[0]
         
@@ -83,32 +83,18 @@ for i in tqdm(range(initObject.training_games)):
 
         
     #plot statistics
-    if plotStats:
-        statistics.update(stateDict, EatenApples[i])
-        if goPlot == 'y' and i%initObject.plotIntervall == 0:
-            statistics.on_running()
+    if initObject.plotStats:
+        statistics.update(stateDict, EatenApples)
+        statistics.on_running(i)
 
     if _exit:
         training_games = i + 1
         break 
 
-if initObject.saveTrainingData:
-    # save traiined state in s json file 
-    with open(filename, 'w') as fp:
-        json.dump(stateDict.stateHash, fp, indent=4)
-    
-# save traiined state in s json file 
-with open(filename, 'w') as fp:
-    json.dump(stateDict.stateHash, fp, indent=4)
 
-if initObject.plotStats:
-    statistics.on_init()
-    statistics.on_running()
-    pyplot.pause(100)
-# fig2 = pyplot.figure()
-# ax2 = fig2.add_subplot(1,1,1)  
-# ax2.plot(range(training_games), EatenApples) 
-pyplot.show()
+#save Training Data and Stats 
+if initObject.saveTrainingData:
+    saveStuff.saveIt(stateDict.stateHash, statistics.getStats())
 
 
 
