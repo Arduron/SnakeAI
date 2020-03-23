@@ -15,7 +15,7 @@ epsilonDiscount = 0.99
 verzögerung = 20.0/1000.0
 plotIntervall = 10
 baseName = 'TrainedModels/trainedState'
-epsilonMin = 10000
+epsilonMin = 1000
 
 
 

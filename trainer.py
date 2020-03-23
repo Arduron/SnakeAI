@@ -13,11 +13,11 @@ from helperfunctions import SaveStuff
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 10
+training_games = 5000
 askToLoad = True
 saveTrainingData = True
 plotStats = True
-plotInervall = 200
+plotInervall = 20
 
 initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 

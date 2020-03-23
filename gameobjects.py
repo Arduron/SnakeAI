@@ -1,25 +1,26 @@
 from random import randint
+import json
 
 class Apple:
     def __init__(self,x,y,PixelGroese, hoehe, breite):
         self.step = PixelGroese
         self.breite = breite
         self.hoehe = hoehe
-        self.x = x * self.step
-        self.y = y * self.step
+        self.apfelnumer = 0
+        filename = "x.json"
+        with open(filename, "r") as fp:
+            self.xList = json.load(fp)
+        filename = "y.json"
+        with open(filename, "r") as fp:
+            self.yList = json.load(fp)
+        self.x = self.xList[0]
+        self.y = self.yList[0]
 
-    def drop(self, player):
-        self.x = randint(1,self.breite-2) * self.step
-        self.y = randint(1,self.hoehe-2) * self.step
-        game = Game()
-        collision = True
-        while collision:
-            for i in range(0,player.length):
-                if game.isCollision(self.x,self.y,player.x[i], player.y[i],self.step-1):
-                    self.x = randint(1,self.breite-2) * self.step
-                    self.y = randint(1,self.hoehe-2) * self.step
-                else:
-                    collision = False
+
+    def drop(self, apfelnumer):
+        self.x = self.xList[apfelnumer]
+        self.y = self.yList[apfelnumer]    
+        
     
     def draw(self, surface, image):
         surface.blit(image,(self.x, self.y)) 

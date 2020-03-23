@@ -34,6 +34,8 @@ class App:
         self.snakeCenterAngle = 0
         self.stepssurvived = 0
 
+        self.apfelnumer = 0
+
         self.initObject = initObject
         if self.on_init() == False:
             self._running = False
@@ -58,7 +60,8 @@ class App:
         # does snake eat apple?
         for i in range(0,self.player.length):
             if self.game.isCollision(self.apple.x,self.apple.y,self.player.x[i], self.player.y[i],self.PixelBreite-1):
-                self.apple.drop(self.player)
+                self.apfelnumer = self.apfelnumer + 1
+                self.apple.drop(self.apfelnumer)
                 self.player.length = self.player.length + 1
                 self.appleHit = 1
  

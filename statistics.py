@@ -102,15 +102,15 @@ class Stats:
             #We need to draw *and* flush
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
-            if i == (self.initObject.training_games - 1):
+            #if i == (self.initObject.training_games - 1):
                 # plt.show()
                 # self.safeIt()
     
-    def safeIt(self):
-        modelNr = 1
-        filename = self.baseName + str(modelNr) + '.png'
-        while path.exists(filename):
-            modelNr = int(modelNr) + 1
-            filename = self.baseName + str(modelNr) + '.png'
-        self.safefig(filename)
+    # def safeIt(self):
+    #     modelNr = 1
+    #     filename = self.baseName + str(modelNr) + '.png'
+    #     while path.exists(filename):
+    #         modelNr = int(modelNr) + 1
+    #         filename = self.baseName + str(modelNr) + '.png'
+    #     self.safefig(filename)
 
