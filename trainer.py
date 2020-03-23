@@ -11,7 +11,7 @@ import json
 from matplotlib import pyplot 
     
 verzögern = True
-spielfeldgöße = [15,15] #Breite dann Höhe
+spielfeldgöße = [20,20] #Breite dann Höhe
 training_games = 20000
 askToLoad = True
 saveTrainingData = True

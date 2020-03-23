@@ -12,7 +12,7 @@ learningrate = 0.3
 diskontierung = 0.9
 epsilonStart = 0.9
 epsilonDiscount = 0.99
-verzögerung = 50.0/1000.0
+verzögerung = 20.0/1000.0
 plotIntervall = 300
 
 
