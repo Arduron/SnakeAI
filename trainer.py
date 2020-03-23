@@ -17,8 +17,9 @@ askToLoad = True
 saveTrainingData = True
 plotStats = True
 plotInervall = 300
+savePlot = True 
 
-initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
+initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall, savePlot)
 
 
 
@@ -134,10 +135,10 @@ with open(filename, 'w') as fp:
 if initObjekt.plotStats:
     statistics.on_init()
     statistics.on_running()
+    if savePlot:
+        plotName = 'TrainedPlot' + str(modelNr) + '.png'
+        pyplot.savefig(plotName)
     pyplot.pause(100)
-# fig2 = pyplot.figure()
-# ax2 = fig2.add_subplot(1,1,1)  
-# ax2.plot(range(training_games), EatenApples) 
 pyplot.show()
 
 

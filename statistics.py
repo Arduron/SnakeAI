@@ -12,6 +12,9 @@ class Stats:
         self.meanApplesEaten = []
         self.initObject = initObjekt
 
+    def getStats(self):
+        return {'numberofQ': self.numberofQ, 'applesEaten': self.applesEaten, 'meanQchane': self.meanQchange, 'meanApplesEaten': self.meanApplesEaten}
+
     def on_init(self):
         self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)
         self.length = len(self.numberofQ)
@@ -39,9 +42,8 @@ class Stats:
         self.axs[1,0].set_title('Apples eaten')
         self.axs[2,0].set_title('Mean Q change')
         self.axs[0,1].set_title('Mean apples Eaten')
-        self.axs[1,1].set_title(' ')
-        self.axs[2,1].set_title(' ')
-
+        # self.axs[1,1].set_title(' ')
+        # self.axs[2,1].set_title(' ')
 
     def update(self, stateDict, eatenApple):
         self.numberofQ.append(len(stateDict.stateHash))
@@ -73,6 +75,7 @@ class Stats:
         self.lines4.set_ydata(self.meanApplesEaten)
         # self.lines5.set_ydata(self.applesEaten)
         # self.lines6.set_ydata(self.meanQchange)
+        
         #Need both of these in order to rescale
         self.axs[0,0].relim()
         self.axs[0,0].autoscale_view()
@@ -89,7 +92,3 @@ class Stats:
         #We need to draw *and* flush
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
-
-    def updatePlot(self, stateDict):
-        ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)
-        plt.show(block = False)
