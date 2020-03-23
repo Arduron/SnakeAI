@@ -1,48 +1,6 @@
 #import numpy as np
 import math
 
-def direction(blocked, appledir, snakedir):
-    angle = angle_with_apple(snakedir, appledir)
-    newDir = [0,0,0]
-    if angle < -0.25:
-        if blocked[0] == 0:
-            newDir[0] = 1
-        elif blocked[1] == 0:
-            newDir[1] = 1
-        else:
-            newDir[2] = 1
-    elif angle > 0.25:
-        if blocked[2] == 0:
-            newDir[2] = 1
-        elif blocked[1] == 0:
-            newDir[1] = 1
-        else:
-            newDir[0] = 1
-    else:
-        if blocked[1] == 0:
-            newDir[1] = 1
-        elif blocked[0] == 0:
-            newDir[0] = 1
-        else:
-            newDir[2] = 1
-
-    #print('Dir ' + str(newDir))
-    return newDir
-
-def getKey(snakedir, newDir):
-    keyPress = [0,0,0,0] # index 0 für links, 1 hoch, 2 rechts, 3 runter
-    if (snakedir[1] == -1 and newDir[0] == 1) or (snakedir[1] == 1 and newDir[2] == 1):
-        keyPress[0] = 1
-    if (snakedir[0] == 1 and newDir[0] == 1) or (snakedir[0] == -1 and newDir[2] == 1):
-        keyPress[1] = 1
-    if (snakedir[1] == 1 and newDir[0] == 1) or (snakedir[1] == -1 and newDir[2] == 1):
-        keyPress[2] = 1
-    if (snakedir[0] == -1 and newDir[0] == 1) or (snakedir[0] == 1 and newDir[2] == 1):
-        keyPress[3] = 1
-    
-    return keyPress
-
-
 def getCurrentDirection(snake):
     if snake.x[0] > snake.x[1]:
         return [1,0]

@@ -14,6 +14,8 @@ epsilonStart = 0.9
 epsilonDiscount = 0.99
 verzögerung = 20.0/1000.0
 plotIntervall = 10
+baseName = 'TrainedModels/trainedState'
+epsilonMin = 10000
 
 
 
@@ -34,4 +36,6 @@ class InitObject:
         self.plotIntervall = plotIntervall
         self.meanQrange = 100
         self.meanApplesEaten = 100
+        self.baseName = baseName
+        self.epsilonMin = epsilonMin
     

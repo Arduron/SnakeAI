@@ -4,15 +4,15 @@ import pygame
 import time
 import math
 
-from appleFinder import *
+from GameHelperFunctions import *
 from gameobjects import *
 
  
 class App:
     PixelBreite = 21 
-    def __init__(self, initObjekt):
-        self.SpielfeldBreite = initObjekt.spielfeldgöße[0] + 2
-        self.SpielfeldHöhe = initObjekt.spielfeldgöße[1] + 2
+    def __init__(self, initObject):
+        self.SpielfeldBreite = initObject.spielfeldgöße[0] + 2
+        self.SpielfeldHöhe = initObject.spielfeldgöße[1] + 2
         self.windowWidth = self.PixelBreite * self.SpielfeldBreite
         self.windowHeight = self.PixelBreite * self.SpielfeldHöhe
         self._running = True
@@ -22,7 +22,7 @@ class App:
         self._apple_surf = None
         self._wall_surf = None
         self.game = Game()
-        self.player = Player(initObjekt.originalSnakeLength, self.PixelBreite) 
+        self.player = Player(initObject.originalSnakeLength, self.PixelBreite) 
         self.apple = Apple(randint(1,self.SpielfeldBreite-2),randint(1,self.SpielfeldHöhe-2), self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wall = Wall(self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wallhit = 0
@@ -32,11 +32,11 @@ class App:
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
         self.snakeCenterAngle = 0
-        
-
         self.stepssurvived = 0
 
-        self.initObjekt = initObjekt
+        self.initObject = initObject
+        if self.on_init() == False:
+            self._running = False
  
     def on_init(self):
         pygame.init()
@@ -81,15 +81,11 @@ class App:
         self.apple.draw(self._display_surf, self._apple_surf)
         self.wall.draw(self._display_surf, self._wall_surf)
     
-        #pygame.display.update() 
         pygame.display.flip()
  
     def on_cleanup(self):
         pygame.quit()
 
-    def on_startup(self):
-        if self.on_init() == False:
-            self._running = False
     def on_execute(self, virtualKey):
         #virtualKey = 0
         
@@ -120,8 +116,8 @@ class App:
         self.on_loop()
         self.on_render()
 
-        if self.initObjekt.verzögern:
-            time.sleep (self.initObjekt.verzögerung)
+        if self.initObject.verzögern:
+            time.sleep (self.initObject.verzögerung)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):

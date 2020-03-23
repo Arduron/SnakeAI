@@ -2,17 +2,28 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 import numpy
+from os import path
 
 plt.ion()
 class Stats:
-    def __init__(self, initObjekt):
+    def __init__(self, initObject):
         self.numberofQ = []
         self.applesEaten = []
         self.meanQchange = []
         self.meanApplesEaten = []
-        self.initObject = initObjekt
+        self.initObject = initObject
+        self.baseName = initObject.baseName
+
+    def getStats(self):
+        return {'numberofQ':self.numberofQ, 'applesEaten': self.applesEaten,\
+                'meanQchange': self.meanQchange, 'meanApplesEaten':self.meanApplesEaten}
 
     def on_init(self):
+        self.goPlot = input('Plot data? (y/n) ')
+        if self.goPlot == 'y':
+            self.init_plots()
+                 
+    def init_plots(self):
         self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)
         self.length = len(self.numberofQ)
         # self.axs[0,0] = self.fig.add_subplot(3,1,1)
@@ -42,7 +53,6 @@ class Stats:
         self.axs[1,1].set_title(' ')
         self.axs[2,1].set_title(' ')
 
-
     def update(self, stateDict, eatenApple):
         self.numberofQ.append(len(stateDict.stateHash))
         self.applesEaten.append(eatenApple - self.initObject.originalSnakeLength)
@@ -59,37 +69,48 @@ class Stats:
         self.meanQchange.append(stateDict.getMeanQ())
         self.length = len(self.numberofQ)
 
-    def on_running(self):
-        #Update data (with the new _and_ the old points)
-        self.lines1.set_xdata(range(self.length))
-        self.lines2.set_xdata(range(len(self.applesEaten)))
-        self.lines3.set_xdata(range(self.length))
-        self.lines4.set_xdata(range(self.length))
-        # self.lines5.set_xdata(range(len(self.applesEaten)))
-        # self.lines6.set_xdata(range(self.length))
-        self.lines1.set_ydata(self.numberofQ)
-        self.lines2.set_ydata(self.applesEaten)
-        self.lines3.set_ydata(self.meanQchange)
-        self.lines4.set_ydata(self.meanApplesEaten)
-        # self.lines5.set_ydata(self.applesEaten)
-        # self.lines6.set_ydata(self.meanQchange)
-        #Need both of these in order to rescale
-        self.axs[0,0].relim()
-        self.axs[0,0].autoscale_view()
-        self.axs[1,0].relim()
-        self.axs[1,0].autoscale_view()
-        self.axs[2,0].relim()
-        self.axs[2,0].autoscale_view()
-        self.axs[0,1].relim()
-        self.axs[0,1].autoscale_view()
-        self.axs[1,1].relim()
-        self.axs[1,1].autoscale_view()
-        self.axs[2,1].relim()
-        self.axs[2,1].autoscale_view()
-        #We need to draw *and* flush
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
+    def on_running(self, i):
+        if self.goPlot == 'y' and i%self.initObject.plotIntervall == 0 or i == (self.initObject.training_games - 1): 
+            if i == (self.initObject.training_games - 1):
+                self.init_plots()
+            #Update data (with the new _and_ the old points)
+            self.lines1.set_xdata(range(self.length))
+            self.lines2.set_xdata(range(len(self.applesEaten)))
+            self.lines3.set_xdata(range(self.length))
+            self.lines4.set_xdata(range(self.length))
+            # self.lines5.set_xdata(range(len(self.applesEaten)))
+            # self.lines6.set_xdata(range(self.length))
+            self.lines1.set_ydata(self.numberofQ)
+            self.lines2.set_ydata(self.applesEaten)
+            self.lines3.set_ydata(self.meanQchange)
+            self.lines4.set_ydata(self.meanApplesEaten)
+            # self.lines5.set_ydata(self.applesEaten)
+            # self.lines6.set_ydata(self.meanQchange)
+            #Need both of these in order to rescale
+            self.axs[0,0].relim()
+            self.axs[0,0].autoscale_view()
+            self.axs[1,0].relim()
+            self.axs[1,0].autoscale_view()
+            self.axs[2,0].relim()
+            self.axs[2,0].autoscale_view()
+            self.axs[0,1].relim()
+            self.axs[0,1].autoscale_view()
+            self.axs[1,1].relim()
+            self.axs[1,1].autoscale_view()
+            self.axs[2,1].relim()
+            self.axs[2,1].autoscale_view()
+            #We need to draw *and* flush
+            self.fig.canvas.draw()
+            self.fig.canvas.flush_events()
+            if i == (self.initObject.training_games - 1):
+                # plt.show()
+                # self.safeIt()
+    
+    def safeIt(self):
+        modelNr = 1
+        filename = self.baseName + str(modelNr) + '.png'
+        while path.exists(filename):
+            modelNr = int(modelNr) + 1
+            filename = self.baseName + str(modelNr) + '.png'
+        self.safefig(filename)
 
-    def updatePlot(self, stateDict):
-        ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)
-        plt.show(block = False)

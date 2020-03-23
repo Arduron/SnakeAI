@@ -1,7 +1,7 @@
 from snake_game import App
 from tqdm import tqdm
 from qAufsatz import StateDict
-from policymaker import QPolicy
+from qAufsatz import QPolicy
 from statistics import Stats
 from os import path
 import matplotlib.animation as animation
@@ -9,67 +9,38 @@ from settings import InitObject
 
 import json
 from matplotlib import pyplot 
+from helperfunctions import SaveStuff
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 5000
+training_games = 10
 askToLoad = True
 saveTrainingData = True
 plotStats = True
 plotInervall = 200
 
-initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
+initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
+stateDict = StateDict(initObject)
+polititian = QPolicy(initObject) 
+saveStuff = SaveStuff(initObject)  
+saveStuff.initSaving(stateDict, polititian)
 
-
-stateDict = StateDict(initObjekt)
-polititian = QPolicy(initObjekt)
-baseName = 'TrainedModels/trainedState'
-
-if initObjekt.askToLoad:
-    load = input('Load existing model? (y/n) ')
-    if load == 'y':
-        train = input('Continue training? (y/n) ')
-        if train == 'n':
-            polititian.epsilonStart = 0
-        
-        #ask for model number to load 
-        modelNr = input('Model number = ')
-        filename = baseName + modelNr + '.json'
-
-        #import training data isf existant 
-        if path.exists(filename):
-            with open(filename, 'r') as fp:
-                stateDict.stateHash = json.load(fp)
-
-#create new filename
-modelNr = 1
-filename = baseName + str(modelNr) + '.json'
-while path.exists(filename):
-    modelNr = int(modelNr) + 1
-    filename = baseName + str(modelNr) + '.json'
-    
-
-EatenApples = []
-_exit = False
+EatenApples = 0
 
 # for sttistics
-if plotStats:
-    statistics = Stats(initObjekt)
-    goPlot = input('Plot data? (y/n) ')
-    if goPlot == 'y':
-        statistics.on_init()
+statistics = Stats(initObject)
+statistics.on_init()
 
-for i in tqdm(range(initObjekt.training_games)):
+_exit = False
+for i in tqdm(range(initObject.training_games)):
     
     _running = True
     
-    snakeGame = App(initObjekt)
-    snakeGame.on_startup()
+    snakeGame = App(initObject)    
     polititian.setEpsilon(i)
-    EatenApples.append(0)
+    EatenApples = 0
     appleDis = snakeGame.getAppleDis()
-
 
     while _running and not _exit:
         #get current state
@@ -87,7 +58,7 @@ for i in tqdm(range(initObjekt.training_games)):
         #führe ihn aus
         _running = [0,0,0]
         _running = snakeGame.on_execute(nextAction)
-        EatenApples[i] = _running[1]
+        EatenApples = _running[1]
         _exit = _running[2]
         _running = _running[0]
         
@@ -112,29 +83,18 @@ for i in tqdm(range(initObjekt.training_games)):
 
         
     #plot statistics
-    if plotStats:
-        statistics.update(stateDict, EatenApples[i])
-        if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
-            statistics.on_running()
+    if initObject.plotStats:
+        statistics.update(stateDict, EatenApples)
+        statistics.on_running(i)
 
     if _exit:
         training_games = i + 1
         break 
 
-if initObjekt.saveTrainingData:
-    # save traiined state in s json file 
-    with open(filename, 'w') as fp:
-        json.dump(stateDict.stateHash, fp, indent=4)
-    
-# save traiined state in s json file 
-with open(filename, 'w') as fp:
-    json.dump(stateDict.stateHash, fp, indent=4)
 
-if initObjekt.plotStats:
-    statistics.on_init()
-    statistics.on_running()
-    pyplot.pause(100)
-pyplot.show()
+#save Training Data and Stats 
+if initObject.saveTrainingData:
+    saveStuff.saveIt(stateDict.stateHash, statistics.getStats())
 
 
 
