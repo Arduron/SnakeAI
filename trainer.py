@@ -10,9 +10,9 @@ from settings import InitObject
 import json
 from matplotlib import pyplot 
     
-verzögern = False
+verzögern = True
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 5000
+training_games = 20000
 askToLoad = True
 saveTrainingData = True
 plotStats = True
@@ -31,7 +31,7 @@ if initObjekt.askToLoad:
     if load == 'y':
         train = input('Continue training? (y/n) ')
         if train == 'n':
-            polititian.epsilon = 0
+            polititian.epsilonStart = 0
         
         #ask for model number to load 
         modelNr = input('Model number = ')
@@ -103,7 +103,7 @@ for i in tqdm(range(initObjekt.training_games)):
         else:
             rewardDis = 0
         if result[0] == 1:
-            reward = 4 + rewardDis
+            reward = 1 + rewardDis
         elif result[1] == 1:
             reward = -1 + rewardDis
         else:
