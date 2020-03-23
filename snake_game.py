@@ -66,18 +66,12 @@ class App:
         # does snake collide with itself?
         for i in range(2,self.player.length):
             if self.game.isCollision(self.player.x[0],self.player.y[0],self.player.x[i], self.player.y[i],self.PixelBreite-1):
-                #print("You lose! Collision with snake: ")
-                #print("x[0] (" + str(self.player.x[0]) + "," + str(self.player.y[0]) + ")")
-                #print("x[" + str(i) + "] (" + str(self.player.x[i]) + "," + str(self.player.y[i]) + ")")
                 self._running = False
                 self.wallhit = 1
 
         # does the snake collide with the wall?
         for i in range(2,self.wall.length):
             if self.game.isCollision(self.player.x[0],self.player.y[0],self.wall.x[i], self.wall.y[i],self.PixelBreite-1):
-                #print("You lose! Collision with wall: ")
-                #print("x[0] (" + str(self.player.x[0]) + "," + str(self.player.y[0]) + ")")
-                #print("x[" + str(i) + "] (" + str(self.wall.x[i]) + "," + str(self.wall.y[i]) + ")")
                 self._running = False
                 self.wallhit = 1
  
@@ -97,7 +91,7 @@ class App:
         if self.on_init() == False:
             self._running = False
     def on_execute(self, virtualKey):
-        virtualKey = 0
+        #virtualKey = 0
         
         pygame.event.pump()
         keys = pygame.key.get_pressed() 
@@ -106,7 +100,6 @@ class App:
         self.snakedir = getCurrentDirection(self.player)
         self.appleAngle = angle_with_apple(self.snakedir, self.appledir)
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
-        #print(self.blocked)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
 
         if (keys[K_RIGHT] or virtualKey == "Right"):
@@ -159,7 +152,6 @@ class App:
         #Berechne Winkel:
         angle = math.atan2(centerDir[1] * self.snakedir[0] - centerDir[0] * self.snakedir[1], centerDir[1] * self.snakedir[1] + centerDir[0] * self.snakedir[0])/ math.pi
         angle = round(angle * 2) / 2
-        print(angle)
         return angle
 
 

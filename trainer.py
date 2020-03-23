@@ -31,7 +31,7 @@ if initObjekt.askToLoad:
     if load == 'y':
         train = input('Continue training? (y/n) ')
         if train == 'n':
-            polititian.epsilon = 0
+            polititian.epsilonStart = 0
         
         #ask for model number to load 
         modelNr = input('Model number = ')
@@ -134,9 +134,6 @@ if initObjekt.plotStats:
     statistics.on_init()
     statistics.on_running()
     pyplot.pause(100)
-# fig2 = pyplot.figure()
-# ax2 = fig2.add_subplot(1,1,1)  
-# ax2.plot(range(training_games), EatenApples) 
 pyplot.show()
 
 
