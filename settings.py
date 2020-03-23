@@ -8,7 +8,7 @@ saveTrainingData = True
 
 #uncommon
 originalSnakeLength = 3
-learningrate = 0.4
+learningrate = 0.2
 diskontierung = 0.9
 epsilonStart = 0.9
 epsilonDiscount = 0.99
