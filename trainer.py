@@ -12,42 +12,17 @@ from matplotlib import pyplot
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 5000
+training_games = 1000000
 askToLoad = True
 saveTrainingData = True
 plotStats = True
-plotInervall = 300
+plotInervall = 1000
 
-initObjekt = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
+initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
+stateDict = StateDict(initObject)
+polititian = QPolicy(initObject)
 
-
-stateDict = StateDict(initObjekt)
-polititian = QPolicy(initObjekt)
-baseName = 'TrainedModels/trainedState'
-
-if initObjekt.askToLoad:
-    load = input('Load existing model? (y/n) ')
-    if load == 'y':
-        train = input('Continue training? (y/n) ')
-        if train == 'n':
-            polititian.epsilon = 0
-        
-        #ask for model number to load 
-        modelNr = input('Model number = ')
-        filename = baseName + modelNr + '.json'
-
-        #import training data isf existant 
-        if path.exists(filename):
-            with open(filename, 'r') as fp:
-                stateDict.stateHash = json.load(fp)
-
-#create new filename
-modelNr = 1
-filename = baseName + str(modelNr) + '.json'
-while path.exists(filename):
-    modelNr = int(modelNr) + 1
-    filename = baseName + str(modelNr) + '.json'
     
 
 EatenApples = []
@@ -55,16 +30,16 @@ _exit = False
 
 # for sttistics
 if plotStats:
-    statistics = Stats(initObjekt)
+    statistics = Stats(initObject)
     goPlot = input('Plot data? (y/n) ')
     if goPlot == 'y':
         statistics.on_init()
 
-for i in tqdm(range(initObjekt.training_games)):
+for i in tqdm(range(initObject.training_games)):
     
     _running = True
     
-    snakeGame = App(initObjekt)
+    snakeGame = App(initObject)
     snakeGame.on_startup()
     polititian.setEpsilon(i)
     EatenApples.append(0)
@@ -114,14 +89,14 @@ for i in tqdm(range(initObjekt.training_games)):
     #plot statistics
     if plotStats:
         statistics.update(stateDict, EatenApples[i])
-        if goPlot == 'y' and i%initObjekt.plotIntervall == 0:
+        if goPlot == 'y' and i%initObject.plotIntervall == 0:
             statistics.on_running()
 
     if _exit:
         training_games = i + 1
         break 
 
-if initObjekt.saveTrainingData:
+if initObject.saveTrainingData:
     # save traiined state in s json file 
     with open(filename, 'w') as fp:
         json.dump(stateDict.stateHash, fp, indent=4)
@@ -130,7 +105,7 @@ if initObjekt.saveTrainingData:
 with open(filename, 'w') as fp:
     json.dump(stateDict.stateHash, fp, indent=4)
 
-if initObjekt.plotStats:
+if initObject.plotStats:
     statistics.on_init()
     statistics.on_running()
     pyplot.pause(100)

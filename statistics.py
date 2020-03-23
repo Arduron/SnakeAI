@@ -5,12 +5,12 @@ import numpy
 
 plt.ion()
 class Stats:
-    def __init__(self, initObjekt):
+    def __init__(self, initObject):
         self.numberofQ = []
         self.applesEaten = []
         self.meanQchange = []
         self.meanApplesEaten = []
-        self.initObject = initObjekt
+        self.initObject = initObject
 
     def on_init(self):
         self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)

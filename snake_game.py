@@ -10,9 +10,9 @@ from gameobjects import *
  
 class App:
     PixelBreite = 21 
-    def __init__(self, initObjekt):
-        self.SpielfeldBreite = initObjekt.spielfeldgöße[0] + 2
-        self.SpielfeldHöhe = initObjekt.spielfeldgöße[1] + 2
+    def __init__(self, initObject):
+        self.SpielfeldBreite = initObject.spielfeldgöße[0] + 2
+        self.SpielfeldHöhe = initObject.spielfeldgöße[1] + 2
         self.windowWidth = self.PixelBreite * self.SpielfeldBreite
         self.windowHeight = self.PixelBreite * self.SpielfeldHöhe
         self._running = True
@@ -22,7 +22,7 @@ class App:
         self._apple_surf = None
         self._wall_surf = None
         self.game = Game()
-        self.player = Player(initObjekt.originalSnakeLength, self.PixelBreite) 
+        self.player = Player(initObject.originalSnakeLength, self.PixelBreite) 
         self.apple = Apple(randint(1,self.SpielfeldBreite-2),randint(1,self.SpielfeldHöhe-2), self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wall = Wall(self.PixelBreite, self.SpielfeldHöhe, self.SpielfeldBreite)
         self.wallhit = 0
@@ -36,7 +36,7 @@ class App:
 
         self.stepssurvived = 0
 
-        self.initObjekt = initObjekt
+        self.initObject = initObject
  
     def on_init(self):
         pygame.init()
@@ -97,7 +97,7 @@ class App:
         if self.on_init() == False:
             self._running = False
     def on_execute(self, virtualKey):
-        virtualKey = 0
+        #virtualKey = 0
         
         pygame.event.pump()
         keys = pygame.key.get_pressed() 
@@ -127,8 +127,8 @@ class App:
         self.on_loop()
         self.on_render()
 
-        if self.initObjekt.verzögern:
-            time.sleep (self.initObjekt.verzögerung)
+        if self.initObject.verzögern:
+            time.sleep (self.initObject.verzögerung)
         return [self._running, self.player.length, self._exit]
 
     def getState(self):
@@ -159,7 +159,6 @@ class App:
         #Berechne Winkel:
         angle = math.atan2(centerDir[1] * self.snakedir[0] - centerDir[0] * self.snakedir[1], centerDir[1] * self.snakedir[1] + centerDir[0] * self.snakedir[0])/ math.pi
         angle = round(angle * 2) / 2
-        print(angle)
         return angle
 
 
