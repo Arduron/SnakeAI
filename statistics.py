@@ -90,6 +90,6 @@ class Stats:
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
 
-    def updatePlot(self, stateDict):
-        ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)
-        plt.show(block = False)
+    # def updatePlot(self, stateDict):
+    #     ani = animation.FuncAnimation(self.fig, self.animatePlot, len(stateDict.stateHash), interval = 1000)
+    #     plt.show(block = False)

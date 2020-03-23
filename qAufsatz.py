@@ -1,16 +1,16 @@
 from collections import deque
 from settings import InitObject
 from random import randint
+import random
 
 
 class StateDict:
     def __init__(self, initObject):
-        self.stateHash = {str((0)):{"Up":1, "Down":1, "Right":1, "Left":1}}
+        self.stateHash = {"initial Entry":{"Up":1, "Down":1, "Right":1, "Left":1}}
         self.learningrate = initObject.learningrate
         self.diskontierung = initObject.diskontierung
         self.initObject = initObject
         self.Qchange = deque([])
-        self.sumQ = 0 
 
     def addState(self,newState):
         if self.stateHash.get(newState) == None:
@@ -42,6 +42,7 @@ class QPolicy:
     def __init__(self, initObject):
         self.epsilonDiscount = initObject.epsilonDiscount
         self.epsilonStart = initObject.epsilonStart
+        self.initObject = initObject
 
     def getAction(self, stateQ):
         maxKey = []
@@ -56,7 +57,7 @@ class QPolicy:
             maxKey.append("Left")
         maxChosen = maxKey[randint(0, len(maxKey)-1)]
 
-        if randint(0,10000) > 10000 * self.epsilon:
+        if randint(0,self.initObject.epsilonMin) > self.initObject.epsilonMin * self.epsilon:
             return maxChosen
         else:
            randKey = ["Up", "Down", "Right", "Left"]

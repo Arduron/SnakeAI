@@ -4,7 +4,7 @@ import pygame
 import time
 import math
 
-from appleFinder import *
+from GameHelperFunctions import *
 from gameobjects import *
 
  
@@ -32,11 +32,11 @@ class App:
         self.snakedir = [0,0]
         self.appledir = getAppleDirection(self.player, self.apple)
         self.snakeCenterAngle = 0
-        
-
         self.stepssurvived = 0
 
         self.initObject = initObject
+        if self.on_init() == False:
+            self._running = False
  
     def on_init(self):
         pygame.init()
@@ -66,18 +66,12 @@ class App:
         # does snake collide with itself?
         for i in range(2,self.player.length):
             if self.game.isCollision(self.player.x[0],self.player.y[0],self.player.x[i], self.player.y[i],self.PixelBreite-1):
-                #print("You lose! Collision with snake: ")
-                #print("x[0] (" + str(self.player.x[0]) + "," + str(self.player.y[0]) + ")")
-                #print("x[" + str(i) + "] (" + str(self.player.x[i]) + "," + str(self.player.y[i]) + ")")
                 self._running = False
                 self.wallhit = 1
 
         # does the snake collide with the wall?
         for i in range(2,self.wall.length):
             if self.game.isCollision(self.player.x[0],self.player.y[0],self.wall.x[i], self.wall.y[i],self.PixelBreite-1):
-                #print("You lose! Collision with wall: ")
-                #print("x[0] (" + str(self.player.x[0]) + "," + str(self.player.y[0]) + ")")
-                #print("x[" + str(i) + "] (" + str(self.wall.x[i]) + "," + str(self.wall.y[i]) + ")")
                 self._running = False
                 self.wallhit = 1
  
@@ -87,15 +81,11 @@ class App:
         self.apple.draw(self._display_surf, self._apple_surf)
         self.wall.draw(self._display_surf, self._wall_surf)
     
-        #pygame.display.update() 
         pygame.display.flip()
  
     def on_cleanup(self):
         pygame.quit()
 
-    def on_startup(self):
-        if self.on_init() == False:
-            self._running = False
     def on_execute(self, virtualKey):
         #virtualKey = 0
         

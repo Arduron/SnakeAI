@@ -1,7 +1,7 @@
 from snake_game import App
 from tqdm import tqdm
 from qAufsatz import StateDict
-from policymaker import QPolicy
+from qAufsatz import QPolicy
 from statistics import Stats
 from os import path
 import matplotlib.animation as animation
@@ -21,12 +21,9 @@ plotInervall = 1000
 initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
 stateDict = StateDict(initObject)
-polititian = QPolicy(initObject)
-
-    
+polititian = QPolicy(initObject)    
 
 EatenApples = []
-_exit = False
 
 # for sttistics
 if plotStats:
@@ -35,16 +32,15 @@ if plotStats:
     if goPlot == 'y':
         statistics.on_init()
 
+_exit = False
 for i in tqdm(range(initObject.training_games)):
     
     _running = True
     
-    snakeGame = App(initObject)
-    snakeGame.on_startup()
+    snakeGame = App(initObject)    
     polititian.setEpsilon(i)
     EatenApples.append(0)
     appleDis = snakeGame.getAppleDis()
-
 
     while _running and not _exit:
         #get current state
