@@ -192,7 +192,7 @@ def getBlocked(snake, wall, step, game):
            
 def angle_with_apple(snakedir, appledir):
     angle = math.atan2(appledir[1] * snakedir[0] - appledir[0] * snakedir[1], appledir[1] * snakedir[1] + appledir[0] * snakedir[0])/ math.pi
-    angle = round(angle * 4) / 4
+    angle = round(angle * 2) / 2
     #print(angle)
     return angle 
 
