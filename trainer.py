@@ -12,7 +12,7 @@ from matplotlib import pyplot
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 5000
+training_games = 50
 askToLoad = True
 saveTrainingData = True
 plotStats = True
