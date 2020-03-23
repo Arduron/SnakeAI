@@ -26,7 +26,7 @@ class SaveStuff:
                 #import training data isf existant 
                 if path.exists(self.filename):
                     with open(self.filename, 'r') as fp:
-                        stateDict.stateHash = json.load(fp)
+                        stateDict.stateHash = json.load(fp)['StateModel']
 
         #create new self.filename
         modelNr = 1
