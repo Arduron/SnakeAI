@@ -18,11 +18,11 @@ agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01,
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 300
+training_games = 3000
 askToLoad = False
 saveTrainingData = False
-plotStats = False
-plotInervall = 5
+plotStats = True
+plotInervall = 50
 
 initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
 
@@ -56,11 +56,10 @@ for i in tqdm(range(initObject.training_games)):
 
         #errechtne nächsten schritt
         action = agent.choose_action(observation)
-        print(action)
         observation_ = snakeGame.getState()
 
         #führe ihn aus
-        _running, ApplesEaten, _exit = snakeGame.on_execute(action)       
+        _running, EatenApples, _exit = snakeGame.on_execute(action)       
         
         #reward??
         result = snakeGame.getResult()
