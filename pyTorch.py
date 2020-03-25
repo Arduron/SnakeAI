@@ -21,7 +21,7 @@ class DeepQNetwork(nn.Module):
         self.to(self.device)
 
     def forward(self, state):
-        print(state)
+        #print(state)
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
         actions = self.fc3(x)

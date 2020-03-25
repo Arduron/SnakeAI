@@ -20,9 +20,10 @@ class Stats:
 
     def on_init(self):
         if self.initObject.plotStats:
-            self.goPlot = input('Plot data? (y/n) ')
-            if self.goPlot == 'y':
-                self.init_plots()
+            self.init_plots()
+            # self.goPlot = input('Plot data? (y/n) ')
+            self.goPlot = 'y'
+            #     self.init_plots()
                  
     def init_plots(self):
         self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)
