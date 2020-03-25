@@ -19,8 +19,8 @@ agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01,
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
 training_games = 3000
-askToLoad = False
-saveTrainingData = False
+askToLoad = True
+saveTrainingData = True
 plotStats = True
 plotInervall = 50
 
@@ -29,7 +29,7 @@ initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, 
 stateDict = StateDict(initObject)
 polititian = QPolicy(initObject) 
 saveStuff = SaveStuff(initObject)  
-saveStuff.initSaving(stateDict, polititian)
+saveStuff.initSaving(agent, polititian)
 
 EatenApples = 0
 
@@ -97,6 +97,6 @@ statistics.safeIt()
 
 #save Training Data and Stats 
 if initObject.saveTrainingData:
-    saveStuff.saveIt(stateDict.stateHash, statistics.getStats())
+    saveStuff.saveIt(agent, statistics.getStats())
 
    
