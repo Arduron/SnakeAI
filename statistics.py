@@ -19,9 +19,10 @@ class Stats:
                 'meanQchange': self.meanQchange, 'meanApplesEaten':self.meanApplesEaten}
 
     def on_init(self):
-        self.goPlot = input('Plot data? (y/n) ')
-        if self.goPlot == 'y':
-            self.init_plots()
+        if self.initObject.plotStats:
+            self.goPlot = input('Plot data? (y/n) ')
+            if self.goPlot == 'y':
+                self.init_plots()
                  
     def init_plots(self):
         self.fig, self.axs = plt.subplots(3, 2, constrained_layout=True)

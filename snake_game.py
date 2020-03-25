@@ -98,16 +98,16 @@ class App:
         self.blocked = getBlocked(self.player, self.wall, self.PixelBreite, self.game)
         self.snakeCenterAngle = self.getSnakeCenterAngle()
 
-        if (keys[K_RIGHT] or virtualKey == "Right"):
+        if (keys[K_RIGHT] or virtualKey == 0):
             self.player.moveRight()
 
-        if (keys[K_LEFT] or virtualKey == "Left"):
+        if (keys[K_LEFT] or virtualKey == 1):
             self.player.moveLeft()
 
-        if (keys[K_UP] or virtualKey == "Up"):
+        if (keys[K_UP] or virtualKey == 2):
             self.player.moveUp()
 
-        if (keys[K_DOWN] or virtualKey == "Down"):
+        if (keys[K_DOWN] or virtualKey == 3):
             self.player.moveDown()
 
         if (keys[K_ESCAPE]):
@@ -118,10 +118,10 @@ class App:
 
         if self.initObject.verzögern:
             time.sleep (self.initObject.verzögerung)
-        return [self._running, self.player.length, self._exit]
+        return (self._running, self.player.length, self._exit)
 
     def getState(self):
-        return str((self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle))
+        return (self.appleAngle, self.blocked[0], self.blocked[1], self.blocked[2], self.blocked[3], self.blocked[4], self.blocked[5], self.blocked[6],self.blocked[7], self.blocked[8], self.blocked[9], self.snakedir[0], self.snakedir[1], self.snakeCenterAngle)
 
     def getResult(self):
         appleZw = self.appleHit

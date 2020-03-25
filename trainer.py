@@ -10,13 +10,18 @@ from settings import InitObject
 import json
 from matplotlib import pyplot 
 from helperfunctions import SaveStuff
+
+from pyTorch import Agent
+
+    
+agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01, input_dims=[14], lr=0.001)
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
 training_games = 300
-askToLoad = True
-saveTrainingData = True
-plotStats = True
+askToLoad = False
+saveTrainingData = False
+plotStats = False
 plotInervall = 5
 
 initObject = InitObject(verzögern, spielfeldgöße, training_games, askToLoad, saveTrainingData, plotStats, plotInervall)
@@ -31,6 +36,7 @@ EatenApples = 0
 # for sttistics
 statistics = Stats(initObject)
 statistics.on_init()
+eps_history = []
 
 _exit = False
 for i in tqdm(range(initObject.training_games)):
@@ -42,25 +48,17 @@ for i in tqdm(range(initObject.training_games)):
     EatenApples = 0
     appleDis = snakeGame.getAppleDis()
 
-    while _running and not _exit:
+    while _running and not _exit:       
         #get current state
-        currentState = snakeGame.getState()
-
-        #füge ihn zur liste
-        stateDict.addState(currentState)
-
-        #get Q values
-        currentStateQ = stateDict.returnStateQ(currentState)
+        observation = snakeGame.getState()
 
         #errechtne nächsten schritt
-        nextAction = polititian.getAction(currentStateQ)
+        action = agent.choose_action(observation)
+        print(action)
+        observation_ = snakeGame.getState()
 
         #führe ihn aus
-        _running = [0,0,0]
-        _running = snakeGame.on_execute(nextAction)
-        EatenApples = _running[1]
-        _exit = _running[2]
-        _running = _running[0]
+        _running, ApplesEaten, _exit = snakeGame.on_execute(action)       
         
         #reward??
         result = snakeGame.getResult()
@@ -79,7 +77,11 @@ for i in tqdm(range(initObject.training_games)):
             reward = -1 + rewardDis
         else:
             reward = 0 + rewardDis
-        stateDict.QUpdate(currentState, nextAction, snakeGame.getState(), reward)
+        agent.store_transition(observation, action, reward, observation_, not _running)
+        agent.learn()
+        
+
+        eps_history.append(agent.epsilon)
 
         
     #plot statistics
@@ -98,8 +100,4 @@ statistics.safeIt()
 if initObject.saveTrainingData:
     saveStuff.saveIt(stateDict.stateHash, statistics.getStats())
 
-
-
-
-
-
+   
