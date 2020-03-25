@@ -32,6 +32,8 @@ saveStuff = SaveStuff(initObject)
 saveStuff.initSaving(stateDict, polititian)
 
 EatenApples = 0
+TARGET_UPDATE = 100
+targetCounter = 0
 
 # for sttistics
 statistics = Stats(initObject)
@@ -78,8 +80,11 @@ for i in tqdm(range(initObject.training_games)):
         else:
             reward = 0 + rewardDis
         agent.store_transition(observation, action, reward, observation_, not _running)
-        agent.learn()
+        if not (targetCounter % TARGET_UPDATE):
+            agent.Q_target = agent.Q_eval
         
+        agent.learn()
+        targetCounter += 1
 
         eps_history.append(agent.epsilon)
 

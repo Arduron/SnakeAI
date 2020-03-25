@@ -45,7 +45,7 @@ class Agent():
 
         self.Q_eval = DeepQNetwork(lr, n_actions=n_actions, input_dims=input_dims,
                                     fc1_dims=15, fc2_dims=10)
-        self.Q_next = DeepQNetwork(lr, n_actions=n_actions, input_dims=input_dims,
+        self.Q_target = DeepQNetwork(lr, n_actions=n_actions, input_dims=input_dims,
                                     fc1_dims=15, fc2_dims=10)
 
         self.state_memory = np.zeros((self.mem_size, *input_dims), dtype=np.float32)
@@ -93,7 +93,8 @@ class Agent():
         terminal_batch = T.tensor(self.terminal_memory[batch]).to(self.Q_eval.device)
 
         q_eval = self.Q_eval.forward(state_batch)[batch_index, action_batch]
-        q_next = self.Q_eval.forward(new_state_batch)
+
+        q_next = self.Q_target.forward(new_state_batch)
         q_next[terminal_batch] = 0.0
 
         q_target = reward_batch + self.gamma*T.max(q_next,dim=1)[0]
