@@ -18,7 +18,7 @@ class SaveStuff:
             if load == 'y':
                 train = input('Continue training? (y/n) ')
                 if train == 'n':
-                    polititian.epsilonStart = 0
+                    agent.epsilon = agent.eps_min
                 
                 #ask for model number to load 
                 modelNr = input('Model number = ')
