@@ -29,9 +29,9 @@ class App:
         self.appleHit = 0
         self.appleAngle = 0
         self.blocked = [0,0,0, 0,0,0,0,0,0,0] #Die ersten drei Stellen für direkte Blocks, danach sieben Stellen für die Strahlen
-        self.snakedir = [0,0]
+        self.snakedir = [0.0,0.0]
         self.appledir = getAppleDirection(self.player, self.apple)
-        self.snakeCenterAngle = 0
+        self.snakeCenterAngle = 0.0
         self.stepssurvived = 0
 
         self.initObject = initObject

@@ -3,13 +3,13 @@ import math
 
 def getCurrentDirection(snake):
     if snake.x[0] > snake.x[1]:
-        return [1,0]
+        return [1.0,0]
     elif snake.x[0] < snake.x[1]:
-        return [-1,0]
+        return [-1.0,0]
     elif snake.y[0] > snake.y[1]:
-        return [0,1]
+        return [0,1.0]
     else:
-        return [0,-1]
+        return [0,-1.0]
 
 def getAppleDirection(snake, apple):
     appleVector = [1,2]
@@ -150,7 +150,7 @@ def getBlocked(snake, wall, step, game):
            
 def angle_with_apple(snakedir, appledir):
     angle = math.atan2(appledir[1] * snakedir[0] - appledir[0] * snakedir[1], appledir[1] * snakedir[1] + appledir[0] * snakedir[0])/ math.pi
-    angle = round(angle * 4) / 4
+    angle = round(angle * 4.0) / 4.0
     #print(angle)
     return angle 
 
