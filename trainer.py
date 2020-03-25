@@ -32,7 +32,7 @@ saveStuff = SaveStuff(initObject)
 saveStuff.initSaving(stateDict, polititian)
 
 EatenApples = 0
-TARGET_UPDATE = 100
+TARGET_UPDATE = 10
 targetCounter = 0
 
 # for sttistics
