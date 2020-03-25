@@ -44,9 +44,9 @@ class Agent():
         #self.replace_target = 100
 
         self.Q_eval = DeepQNetwork(lr, n_actions=n_actions, input_dims=input_dims,
-                                    fc1_dims=75, fc2_dims=40)
+                                    fc1_dims=10, fc2_dims=10)
         self.Q_target = DeepQNetwork(lr, n_actions=n_actions, input_dims=input_dims,
-                                    fc1_dims=75, fc2_dims=40)
+                                    fc1_dims=10, fc2_dims=10)
 
         self.state_memory = np.zeros((self.mem_size, *input_dims), dtype=np.float32)
         self.new_state_memory = np.zeros((self.mem_size, *input_dims), dtype=np.float32)

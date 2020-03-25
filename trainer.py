@@ -14,11 +14,11 @@ from helperfunctions import SaveStuff
 from pyTorch import Agent
 
     
-agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01, input_dims=[15], lr=0.001)
+agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01, input_dims=[6], lr=0.001)
     
 verzögern = False
-spielfeldgöße = [15,15] #Breite dann Höhe
-training_games = 3000
+spielfeldgöße = [40,29] #Breite dann Höhe
+training_games = 30000
 askToLoad = True
 saveTrainingData = True
 plotStats = True
@@ -53,13 +53,15 @@ for i in tqdm(range(initObject.training_games)):
     while _running and not _exit:       
         #get current state
         observation = snakeGame.getState()
+        #print(observation)
 
         #errechtne nächsten schritt
         action = agent.choose_action(observation)
-        observation_ = snakeGame.getState()
 
         #führe ihn aus
-        _running, EatenApples, _exit = snakeGame.on_execute(action)       
+        #print(action)
+        _running, EatenApples, _exit = snakeGame.on_execute(action)     
+        observation_ = snakeGame.getState()  
         
         #reward??
         result = snakeGame.getResult()
@@ -67,9 +69,12 @@ for i in tqdm(range(initObject.training_games)):
         appleDisOld = appleDis
         appleDis = snakeGame.getAppleDis()
         if appleDis < appleDisOld:
-            rewardDis = 0.05
+            #rewardDis = 0.05
+            rewardDis = 0
         elif appleDisOld < appleDis:
-            rewardDis = -0.05
+            #rewardDis = -0.05
+            rewardDis = 0
+            pass
         else:
             rewardDis = 0
         if result[0] == 1:
