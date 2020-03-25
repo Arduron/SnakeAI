@@ -14,7 +14,7 @@ from helperfunctions import SaveStuff
 from pyTorch import Agent
 
     
-agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01, input_dims=[14], lr=0.001)
+agent = Agent(gamma=0.99, epsilon=1.0, batch_size=64, n_actions=4, eps_end=0.01, input_dims=[15], lr=0.001)
     
 verzögern = False
 spielfeldgöße = [15,15] #Breite dann Höhe
