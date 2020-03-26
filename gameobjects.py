@@ -30,9 +30,7 @@ class Player:
         self.x = [3]
         self.y = [3]
         self.direction = 0
-        self.length = 3    
-        self.updateCountMax = 2
-        self.updateCount = 0
+        self.length = 3 
         self.step = PixelGroese
         self.length = length
         self.x[0] = self.x[0] * self.step
@@ -47,25 +45,20 @@ class Player:
  
     def update(self):
  
-        self.updateCount = self.updateCount + 1
-        if self.updateCount > self.updateCountMax:
- 
-            # update previous positions
-            for i in range(self.length-1,0,-1):
-                self.x[i] = self.x[i-1]
-                self.y[i] = self.y[i-1]
- 
-            # update position of head of snake
-            if self.direction == 0:
-                self.x[0] = self.x[0] + self.step
-            if self.direction == 1:
-                self.x[0] = self.x[0] - self.step
-            if self.direction == 2:
-                self.y[0] = self.y[0] - self.step
-            if self.direction == 3:
-                self.y[0] = self.y[0] + self.step
- 
-            self.updateCount = 0
+        # update previous positions
+        for i in range(self.length-1,0,-1):
+            self.x[i] = self.x[i-1]
+            self.y[i] = self.y[i-1]
+
+        # update position of head of snake
+        if self.direction == 0:
+            self.x[0] = self.x[0] + self.step
+        if self.direction == 1:
+            self.x[0] = self.x[0] - self.step
+        if self.direction == 2:
+            self.y[0] = self.y[0] - self.step
+        if self.direction == 3:
+            self.y[0] = self.y[0] + self.step
  
  
     def moveRight(self):
